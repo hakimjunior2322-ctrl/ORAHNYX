@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réservation - Salon Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700&family=Lato:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+            overflow-x: hidden;
+        }
+
+        /* HEADER */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            width: 100vw;
+        }
+
+        .header-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        .header-left {
+            font-size: 7px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            line-height: 1.2;
+            opacity: 0.7;
+        }
+
+        .logo {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Bodoni Moda', serif;
+            font-size: 10px;
+            font-weight: 400;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            font-size: 8px;
+            font-weight: 500;
+            letter-spacing: 0.4px;
+        }
+
+        .header-right a {
+            color: #1a1a1a;
+            text-decoration: none;
+            transition: opacity 0.3s;
+            white-space: nowrap;
+            opacity: 0.7;
+        }
+
+        .header-right a:hover {
+            opacity: 1;
+        }
+
+        /* MAIN */
+        main {
+            position: relative;
+            z-index: 2;
+            margin-top: 50px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 40px 20px;
+        }
+
+        .page-title {
+            font-family: 'Bodoni Moda', serif;
+            font-size: clamp(28px, 6vw, 40px);
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 40px;
+            letter-spacing: -0.3px;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        /* SECTION GAUCHE - RÉSERVATION */
+        .booking-section {
+            background: #fdfbf7;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #e8dfd0;
+        }
+
+        .section-title {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 20px;
+            font-weight: 400;
+            margin-bottom: 20px;
+            letter-spacing: -0.2px;
+            border-bottom: 1px solid #d4a574;
+            padding-bottom: 15px;
+        }
+
+        /* CALENDAR */
+        .calendar {
+            margin-bottom: 30px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-header button {
+            background: #8b7355;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .calendar-header button:hover {
+            background: #6b5745;
+        }
+
+        .month-year {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .day-header {
+            text-align: center;
+            font-weight: 700;
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #8b7355;
+            padding: 8px;
+        }
+
+        .day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .day:hover {
+            border-color: #8b7355;
+            background: #f9f5f0;
+        }
+
+        .day.selected {
+            background: #8b7355;
+            color: white;
+            border-color: #8b7355;
+            font-weight: 700;
+        }
+
+        .day.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* HORAIRES */
+        .time-slots {
+            margin-bottom: 30px;
+        }
+
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .time-slot {
+            padding: 12px;
+            border: 1px solid #d4a574;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            background: white;
+            transition: all 0.3s;
+            color: #8b7355;
+        }
+
+        .time-slot:hover {
+            background: #f9f5f0;
+            border-color: #8b7355;
+        }
+
+        .time-slot.selected {
+            background: #8b7355;
+            color: white;
+            border-color: #8b7355;
+        }
+
+        .time-slot.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* PACKS */
+        .packs-selection {
+            margin-bottom: 30px;
+        }
+
+        .pack-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .pack-option {
+            padding: 15px;
+            border: 2px solid #e8dfd0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .pack-option:hover {
+            border-color: #8b7355;
+            box-shadow: 0 4px 12px rgba(139, 115, 85, 0.1);
+        }
+
+        .pack-option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .pack-name {
+            font-weight: 700;
+            font-size: 12px;
+            color: #1a1a1a;
+            margin-bottom: 5px;
+        }
+
+        .pack-details {
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .pack-price {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 16px;
+            font-weight: 400;
+            color: #8b7355;
+        }
+
+        /* SECTION DROITE - PRODUITS OPTIONNELS */
+        .products-section {
+            background: #f9f5f0;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #e8dfd0;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .product-item {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #e8dfd0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .product-item:hover {
+            border-color: #8b7355;
+            box-shadow: 0 4px 12px rgba(139, 115, 85, 0.1);
+        }
+
+        .product-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .product-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .product-name {
+            font-weight: 600;
+            font-size: 11px;
+            color: #1a1a1a;
+        }
+
+        .product-price {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 12px;
+            color: #8b7355;
+            font-weight: 400;
+        }
+
+        /* RÉSUMÉ & BOUTON */
+        .summary-box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid #1a1a1a;
+            margin-top: 30px;
+        }
+
+        .summary-title {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 16px;
+            font-weight: 400;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .summary-row.total {
+            font-size: 14px;
+            font-weight: 700;
+            border-bottom: none;
+            border-top: 2px solid #1a1a1a;
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        .book-button {
+            width: 100%;
+            padding: 14px;
+            background: #8b7355;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .book-button:hover {
+            background: #6b5745;
+            transform: translateY(-2px);
+        }
+
+        .book-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: #1a1a1a;
+            color: #999;
+            padding: 45px 20px;
+            margin-top: 80px;
+            text-align: center;
+            font-size: 9px;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .time-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .products-grid {
+                max-height: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            main {
+                padding: 20px 15px;
+            }
+
+            .booking-section,
+            .products-section {
+                padding: 20px;
+            }
+
+            .time-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-wrapper">
+            <div class="header-left">SALON<br>© 24</div>
+            <div class="logo">PREMIUM</div>
+            <div class="header-right">
+                <a href="/">← Retour au site</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <h1 class="page-title">Réservez votre rendez-vous</h1>
+
+        <div class="container">
+            <!-- GAUCHE: RÉSERVATION -->
+            <div class="booking-section">
+                <!-- CALENDRIER -->
+                <div class="calendar">
+                    <h3 class="section-title">📅 Sélectionnez une date</h3>
+                    
+                    <div class="calendar-header">
+                        <button onclick="previousMonth()">← Précédent</button>
+                        <div class="month-year" id="monthYear"></div>
+                        <button onclick="nextMonth()">Suivant →</button>
+                    </div>
+
+                    <div class="calendar-grid" id="calendarGrid"></div>
+                </div>
+
+                <!-- HORAIRES -->
+                <div class="time-slots">
+                    <h3 class="section-title">⏰ Sélectionnez une heure</h3>
+                    <div class="time-grid" id="timeGrid"></div>
+                </div>
+
+                <!-- PACKS -->
+                <div class="packs-selection">
+                    <h3 class="section-title">💆 Choisissez votre prestation</h3>
+                    <div class="pack-options" id="packOptions"></div>
+                </div>
+            </div>
+
+            <!-- DROITE: PRODUITS OPTIONNELS -->
+            <div class="products-section">
+                <h3 class="section-title">🛍️ Ajouter des produits (optionnel)</h3>
+                <div class="products-grid" id="productsGrid"></div>
+            </div>
+        </div>
+
+        <!-- RÉSUMÉ -->
+        <div class="summary-box">
+            <div class="summary-title">Récapitulatif de votre réservation</div>
+            
+            <div class="summary-row">
+                <span>Date:</span>
+                <span id="summaryDate">Non sélectionnée</span>
+            </div>
+
+            <div class="summary-row">
+                <span>Heure:</span>
+                <span id="summaryTime">Non sélectionnée</span>
+            </div>
+
+            <div class="summary-row">
+                <span>Prestation:</span>
+                <span id="summaryPack">Aucune</span>
+            </div>
+
+            <div id="summaryProducts"></div>
+
+            <div class="summary-row total">
+                <span>TOTAL:</span>
+                <span id="summaryTotal">0€</span>
+            </div>
+
+            <button class="book-button" onclick="submitBooking()">Confirmer la réservation</button>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>Salon Premium • Dubaï • +971 4 123 456 789</p>
+        <p>contact@salon.ae</p>
+    </footer>
+
+    <script>
+        // DATA
+        const packs = [
+            { id: 1, name: 'Essentiel', duration: 30, price: 55, desc: '30 minutes' },
+            { id: 2, name: 'Premium', duration: 90, price: 120, desc: '90 minutes' },
+            { id: 3, name: 'Signature', duration: 120, price: 250, desc: '120 minutes' }
+        ];
+
+        const products = [
+            { id: 1, name: 'Sérum Luxe', price: 45 },
+            { id: 2, name: 'Crème Corps', price: 38 },
+            { id: 3, name: 'Masque Nettoyant', price: 32 },
+            { id: 4, name: 'Vernis Premium', price: 18 },
+            { id: 5, name: 'Huile Capillaire', price: 28 },
+            { id: 6, name: 'Kit Beauté Glow', price: 85 }
+        ];
+
+        const timeSlots = ['09:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
+
+        // STATE
+        let booking = {
+            date: null,
+            time: null,
+            pack: null,
+            products: []
+        };
+
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+
+        // INIT
+        function init() {
+            renderCalendar();
+            renderPacks();
+            renderProducts();
+            renderTimeSlots();
+        }
+
+        // CALENDAR
+        function renderCalendar() {
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const today = new Date();
+
+            document.getElementById('monthYear').textContent = 
+                new Date(currentYear, currentMonth).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+
+            // Headers
+            ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].forEach(day => {
+                const header = document.createElement('div');
+                header.className = 'day-header';
+                header.textContent = day;
+                grid.appendChild(header);
+            });
+
+            // Days
+            for (let i = 0; i < firstDay; i++) {
+                grid.appendChild(document.createElement('div'));
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'day';
+                dayEl.textContent = day;
+
+                const date = new Date(currentYear, currentMonth, day);
+                
+                // Disable past dates
+                if (date < today) {
+                    dayEl.classList.add('disabled');
+                } else {
+                    dayEl.onclick = () => selectDate(day, dayEl);
+                    
+                    // Highlight selected
+                    if (booking.date && booking.date.getDate() === day && 
+                        booking.date.getMonth() === currentMonth && 
+                        booking.date.getFullYear() === currentYear) {
+                        dayEl.classList.add('selected');
+                    }
+                }
+
+                grid.appendChild(dayEl);
+            }
+        }
+
+        function selectDate(day, element) {
+            document.querySelectorAll('.day.selected').forEach(d => d.classList.remove('selected'));
+            element.classList.add('selected');
+            
+            booking.date = new Date(currentYear, currentMonth, day);
+            updateSummary();
+        }
+
+        function previousMonth() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar();
+        }
+
+        // PACKS
+        function renderPacks() {
+            const container = document.getElementById('packOptions');
+            container.innerHTML = packs.map((pack, idx) => `
+                <label class="pack-option">
+                    <input type="radio" name="pack" value="${pack.id}" onchange="selectPack(${pack.id})">
+                    <div>
+                        <div class="pack-name">${pack.name}</div>
+                        <div class="pack-details">${pack.desc}</div>
+                        <div class="pack-price">${pack.price}€</div>
+                    </div>
+                </label>
+            `).join('');
+        }
+
+        function selectPack(packId) {
+            booking.pack = packs.find(p => p.id === packId);
+            updateSummary();
+        }
+
+        // PRODUCTS
+        function renderProducts() {
+            const container = document.getElementById('productsGrid');
+            container.innerHTML = products.map(product => `
+                <label class="product-item">
+                    <input type="checkbox" value="${product.id}" onchange="toggleProduct(${product.id}, this.checked)">
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">${product.price}€</div>
+                    </div>
+                </label>
+            `).join('');
+        }
+
+        function toggleProduct(productId, checked) {
+            if (checked) {
+                const product = products.find(p => p.id === productId);
+                booking.products.push(product);
+            } else {
+                booking.products = booking.products.filter(p => p.id !== productId);
+            }
+            updateSummary();
+        }
+
+        // TIME SLOTS
+        function renderTimeSlots() {
+            const container = document.getElementById('timeGrid');
+            container.innerHTML = timeSlots.map(time => `
+                <div class="time-slot" onclick="selectTime('${time}', this)">${time}</div>
+            `).join('');
+        }
+
+        function selectTime(time, element) {
+            document.querySelectorAll('.time-slot.selected').forEach(t => t.classList.remove('selected'));
+            element.classList.add('selected');
+            booking.time = time;
+            updateSummary();
+        }
+
+        // SUMMARY
+        function updateSummary() {
+            const dateStr = booking.date ? booking.date.toLocaleDateString('fr-FR') : 'Non sélectionnée';
+            const packStr = booking.pack ? booking.pack.name : 'Aucune';
+            const timeStr = booking.time || 'Non sélectionnée';
+
+            document.getElementById('summaryDate').textContent = dateStr;
+            document.getElementById('summaryTime').textContent = timeStr;
+            document.getElementById('summaryPack').textContent = `${packStr} ${booking.pack ? '(' + booking.pack.price + '€)' : ''}`;
+
+            const productsTotal = booking.products.reduce((sum, p) => sum + p.price, 0);
+            const packTotal = booking.pack ? booking.pack.price : 0;
+            const total = packTotal + productsTotal;
+
+            if (booking.products.length > 0) {
+                document.getElementById('summaryProducts').innerHTML = 
+                    `<div class="summary-row"><span>Produits:</span><span>${productsTotal}€</span></div>`;
+            } else {
+                document.getElementById('summaryProducts').innerHTML = '';
+            }
+
+            document.getElementById('summaryTotal').textContent = total + '€';
+        }
+
+        // SUBMIT
+        function submitBooking() {
+            if (!booking.date || !booking.time || !booking.pack) {
+                alert('Veuillez sélectionner une date, une heure et une prestation');
+                return;
+            }
+
+            // Ouvrir un formulaire pour les infos client
+            const clientName = prompt('Votre nom complet:');
+            if (!clientName) return;
+
+            const clientEmail = prompt('Votre email:');
+            if (!clientEmail) return;
+
+            const clientPhone = prompt('Votre téléphone:');
+            if (!clientPhone) return;
+
+            const totalPrice = booking.pack.price + booking.products.reduce((sum, p) => sum + p.price, 0);
+
+            // Envoyer à l'API
+            const reservationData = {
+                clientName,
+                clientEmail,
+                clientPhone,
+                date: booking.date.toISOString().split('T')[0],
+                time: booking.time,
+                packId: booking.pack.id,
+                products: booking.products.map(p => ({ name: p.name, price: p.price })),
+                totalPrice
+            };
+
+            fetch('/api/reservations/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reservationData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`✅ Réservation confirmée!\n\nDate: ${reservationData.date} à ${reservationData.time}\nPrestation: ${booking.pack.name}\nTotal: ${totalPrice}€\n\nUn email de confirmation a été envoyé à ${clientEmail}`);
+                    
+                    // Réinitialiser
+                    booking = { date: null, time: null, pack: null, products: [] };
+                    init();
+                } else {
+                    alert('Erreur: ' + (data.error || 'Impossible de créer la réservation'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Erreur de connexion au serveur');
+            });
+        }
+
+        // START
+        init();
+    </script>
+</body>
+</html>
