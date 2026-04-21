@@ -1,1 +1,12 @@
-
+{
+  "name": "salon-premium-frontend",
+  "version": "1.0.0",
+  "description": "Salon Premium Frontend",
+  "scripts": {
+    "dev": "echo 'Dev mode'",
+    "build": "echo 'Build complete'",
+    "start": "node server.js"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
