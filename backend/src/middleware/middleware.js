@@ -164,7 +164,27 @@ const xssProtection = (req, res, next) => {
   next();
 };
 
+// Middleware d'authentification (basique pour l'instant)
+const authenticate = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) {
+    return res.status(401).json({ error: 'Token manquant' });
+  }
+  // TODO: Vérifier le token JWT
+  req.user = { id: 1 }; // Temporaire
+  next();
+};
+
+const authorize = (role) => {
+  return (req, res, next) => {
+    // TODO: Vérifier le rôle
+    next();
+  };
+};
+
 module.exports = {
+  authenticate,
+  authorize,
   validateInput,
   rateLimit,
   xssProtection

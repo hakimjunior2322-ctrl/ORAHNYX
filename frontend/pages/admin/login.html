@@ -1,4 +1,3 @@
-<!-- frontend/pages/admin/login.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -139,6 +138,7 @@
       text-align: center;
       color: #8b7355;
       font-size: 12px;
+      margin-bottom: 24px;
     }
 
     .spinner {
@@ -204,79 +204,58 @@
   </div>
 
   <script>
-    const API_URL = '/api';
-    const loginForm = document.getElementById('loginForm');
-    const errorAlert = document.getElementById('errorAlert');
-    const loading = document.getElementById('loading');
-    const loginBtn = document.getElementById('loginBtn');
+const API_URL = '/api';
+const loginForm = document.getElementById('loginForm');
+const errorAlert = document.getElementById('errorAlert');
+const loading = document.getElementById('loading');
+const loginBtn = document.getElementById('loginBtn');
 
-    // Vérifier si déjà connecté
-    if (localStorage.getItem('admin_token')) {
-      window.location.href = '/admin/dashboard';
-    }
+if (localStorage.getItem('admin_token')) {
+  window.location.href = '/admin/dashboard';
+}
 
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const rememberMe = document.getElementById('rememberMe').checked;
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
 
-      errorAlert.classList.remove('show');
-      loginBtn.disabled = true;
-      loading.style.display = 'block';
+  errorAlert.classList.remove('show');
+  loginBtn.disabled = true;
+  loading.style.display = 'block';
 
-      try {
-        const response = await fetch(`${API_URL}/auth/login`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ email, password })
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          // Sauvegarder le token
-          if (rememberMe) {
-            localStorage.setItem('admin_token', data.token);
-            localStorage.setItem('admin_email', email);
-          } else {
-            sessionStorage.setItem('admin_token', data.token);
-          }
-
-          // Rediriger vers dashboard
-          window.location.href = '/admin/dashboard';
-        } else {
-          throw new Error(data.error || 'Erreur de connexion');
-        }
-      } catch (error) {
-        errorAlert.textContent = error.message;
-        errorAlert.classList.add('show');
-        loginBtn.disabled = false;
-        loading.style.display = 'none';
-      }
+  try {
+    const response = await fetch(API_URL + '/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email, password })
     });
 
-    // Récupérer l'email sauvegardé si "Se souvenir"
-    const savedEmail = localStorage.getItem('admin_email');
-    if (savedEmail) {
-      document.getElementById('email').value = savedEmail;
-      document.getElementById('rememberMe').checked = true;
-    }
+    const data = await response.json();
 
-    // Sécurité: Empêcher XSS
-    function sanitizeInput(input) {
-      const map = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;'
-      };
-      return input.replace(/[&<>"']/g, m => map[m]);
+    if (response.ok) {
+      localStorage.setItem('admin_token', data.token);
+      localStorage.setItem('admin_email', email);
+      window.location.href = '/admin/dashboard';
+    } else {
+      throw new Error(data.error || 'Erreur de connexion');
     }
+  } catch (error) {
+    errorAlert.textContent = error.message;
+    errorAlert.classList.add('show');
+    loginBtn.disabled = false;
+    loading.style.display = 'none';
+  }
+});
+
+const savedEmail = localStorage.getItem('admin_email');
+if (savedEmail) {
+  document.getElementById('email').value = savedEmail;
+  document.getElementById('rememberMe').checked = true;
+}
   </script>
 </body>
 </html>
+

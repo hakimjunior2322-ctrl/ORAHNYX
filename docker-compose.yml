@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   postgres:
     image: postgres:15-alpine
@@ -44,7 +42,7 @@ services:
       dockerfile: docker/Dockerfile.frontend
     container_name: salon-premium-web
     ports:
-      - "3001:3000"
+        - "3002:3000"
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:8000
       NODE_ENV: production
