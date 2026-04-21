@@ -1,0 +1,282 @@
+<!-- frontend/pages/admin/login.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - Salon Premium</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-container {
+      background: white;
+      border-radius: 12px;
+      padding: 60px 40px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .login-logo {
+      font-family: 'Bodoni Moda', serif;
+      font-size: 32px;
+      color: #8b7355;
+      margin-bottom: 12px;
+    }
+
+    .login-subtitle {
+      font-size: 12px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #1a1a1a;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      font-family: 'Lato', sans-serif;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #8b7355;
+      box-shadow: 0 0 0 3px rgba(139, 115, 85, 0.1);
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 14px;
+      background: #8b7355;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 12px;
+    }
+
+    .btn-login:hover {
+      background: #6b5745;
+    }
+
+    .btn-login:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .alert {
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin-bottom: 24px;
+      font-size: 13px;
+      display: none;
+    }
+
+    .alert-error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .alert.show {
+      display: block;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      margin-bottom: 24px;
+      font-size: 12px;
+    }
+
+    .remember-me input[type="checkbox"] {
+      width: auto;
+      margin-right: 8px;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      color: #8b7355;
+      font-size: 12px;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #e0e0e0;
+      border-top-color: #8b7355;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-header">
+      <div class="login-logo">SALON</div>
+      <div class="login-subtitle">Admin Access</div>
+    </div>
+
+    <div class="alert alert-error" id="errorAlert"></div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          placeholder="admin@salon.com" 
+          required 
+          autocomplete="email"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input 
+          type="password" 
+          id="password" 
+          placeholder="••••••••" 
+          required 
+          autocomplete="current-password"
+        >
+      </div>
+
+      <div class="remember-me">
+        <input type="checkbox" id="rememberMe">
+        <label for="rememberMe" style="margin: 0;">Se souvenir de moi</label>
+      </div>
+
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        Connexion en cours...
+      </div>
+
+      <button type="submit" class="btn-login" id="loginBtn">CONNEXION</button>
+    </form>
+  </div>
+
+  <script>
+    const API_URL = '/api';
+    const loginForm = document.getElementById('loginForm');
+    const errorAlert = document.getElementById('errorAlert');
+    const loading = document.getElementById('loading');
+    const loginBtn = document.getElementById('loginBtn');
+
+    // Vérifier si déjà connecté
+    if (localStorage.getItem('admin_token')) {
+      window.location.href = '/admin/dashboard';
+    }
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const rememberMe = document.getElementById('rememberMe').checked;
+
+      errorAlert.classList.remove('show');
+      loginBtn.disabled = true;
+      loading.style.display = 'block';
+
+      try {
+        const response = await fetch(`${API_URL}/auth/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Sauvegarder le token
+          if (rememberMe) {
+            localStorage.setItem('admin_token', data.token);
+            localStorage.setItem('admin_email', email);
+          } else {
+            sessionStorage.setItem('admin_token', data.token);
+          }
+
+          // Rediriger vers dashboard
+          window.location.href = '/admin/dashboard';
+        } else {
+          throw new Error(data.error || 'Erreur de connexion');
+        }
+      } catch (error) {
+        errorAlert.textContent = error.message;
+        errorAlert.classList.add('show');
+        loginBtn.disabled = false;
+        loading.style.display = 'none';
+      }
+    });
+
+    // Récupérer l'email sauvegardé si "Se souvenir"
+    const savedEmail = localStorage.getItem('admin_email');
+    if (savedEmail) {
+      document.getElementById('email').value = savedEmail;
+      document.getElementById('rememberMe').checked = true;
+    }
+
+    // Sécurité: Empêcher XSS
+    function sanitizeInput(input) {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return input.replace(/[&<>"']/g, m => map[m]);
+    }
+  </script>
+</body>
+</html>
