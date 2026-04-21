@@ -4,11 +4,8 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Créer le dossier uploads s'il n'existe pas
-const uploadsDir = path.join(__dirname, '../../uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
+// Le dossier uploads est monté via volume Docker
+const uploadsDir = '/app/uploads';
 
 // Configuration de multer
 const storage = multer.diskStorage({
@@ -23,7 +20,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ 
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max
+  limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: function (req, file, cb) {
     const allowedTypes = /jpeg|jpg|png|gif|webp/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
@@ -37,7 +34,6 @@ const upload = multer({
   }
 });
 
-// Route d'upload
 router.post('/image', upload.single('image'), (req, res) => {
   try {
     if (!req.file) {
@@ -52,7 +48,6 @@ router.post('/image', upload.single('image'), (req, res) => {
   }
 });
 
-// Route pour supprimer une image
 router.delete('/image/:filename', (req, res) => {
   try {
     const filename = req.params.filename;

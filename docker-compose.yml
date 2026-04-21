@@ -1,5 +1,5 @@
-services:
-  postgres:
+  services:
+  db:
     image: postgres:15-alpine
     container_name: salon-premium-db
     ports:
@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: salon_user
       POSTGRES_PASSWORD: salon_password
-      POSTGRES_DB: salon_db
+      POSTGRES_DB: salon_premium
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -18,23 +18,20 @@ services:
     restart: always
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: ../docker/Dockerfile.backend
+    build: ./backend
     container_name: salon-premium-api
     ports:
       - "8000:8000"
     environment:
-      NODE_ENV: production
-      DATABASE_URL: postgresql://salon_user:salon_password@postgres:5432/salon_db
-      JWT_SECRET: your_super_secret_key_change_this
-      STRIPE_SECRET_KEY: your_stripe_key
-      PORT: 8000
+      DATABASE_URL: postgresql://salon_user:salon_password@db:5432/salon_premium
+      JWT_SECRET: votre_secret_super_securise_changez_moi_123456789
+      REDIS_URL: redis://cache:6379
     depends_on:
-      postgres:
-        condition: service_healthy
-    restart: always
-    command: npm run start:prod
+      - db
+      - cache
+    volumes:
+      - ./uploads:/app/uploads
+    restart: unless-stopped
 
   frontend:
     build:
@@ -42,7 +39,7 @@ services:
       dockerfile: docker/Dockerfile.frontend
     container_name: salon-premium-web
     ports:
-        - "3002:3000"
+      - "3002:3000"
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:8000
       NODE_ENV: production
@@ -50,7 +47,7 @@ services:
       - backend
     restart: unless-stopped
 
-  redis:
+  cache:
     image: redis:7-alpine
     container_name: salon-premium-cache
     ports:
@@ -66,3 +63,4 @@ volumes:
 networks:
   default:
     name: salon-network
+
