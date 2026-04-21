@@ -33,9 +33,10 @@
             z-index: 100;
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(10px);
-            padding: 12px 20px;
+            padding: 12px 15px;
             border-bottom: 1px solid #f0f0f0;
-            width: 100vw;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .header-wrapper {
@@ -45,6 +46,8 @@
             justify-content: space-between;
             align-items: center;
             padding: 0 10px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .header-left {
@@ -54,26 +57,31 @@
             letter-spacing: 0.6px;
             line-height: 1.2;
             opacity: 0.7;
+            flex: 0 0 auto;
+            min-width: 40px;
         }
 
         .logo {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
+            position: relative;
+            flex: 1;
+            text-align: center;
             font-family: 'Bodoni Moda', serif;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 400;
-            letter-spacing: 1.2px;
+            letter-spacing: 1px;
             text-transform: uppercase;
+            white-space: nowrap;
         }
 
         .header-right {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             align-items: center;
-            font-size: 8px;
+            font-size: 7px;
             font-weight: 500;
-            letter-spacing: 0.4px;
+            letter-spacing: 0.3px;
+            flex: 0 0 auto;
+            justify-content: flex-end;
         }
 
         .header-right a {
@@ -82,10 +90,51 @@
             transition: opacity 0.3s;
             white-space: nowrap;
             opacity: 0.7;
+            font-size: 8px;
         }
 
         .header-right a:hover {
             opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .header-right a {
+                font-size: 7px;
+            }
+
+            .logo {
+                font-size: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 10px 12px;
+            }
+
+            .header-wrapper {
+                padding: 0 5px;
+                gap: 10px;
+            }
+
+            .header-left {
+                font-size: 6px;
+                min-width: 35px;
+            }
+
+            .logo {
+                font-size: 7px;
+                letter-spacing: 0.5px;
+            }
+
+            .header-right {
+                gap: 10px;
+                font-size: 6px;
+            }
+
+            .header-right a {
+                font-size: 7px;
+            }
         }
 
         /* MAIN */
@@ -245,11 +294,6 @@
             background: #8b7355;
             color: white;
             border-color: #8b7355;
-        }
-
-        .time-slot.disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
         }
 
         /* PACKS */
@@ -420,6 +464,103 @@
             cursor: not-allowed;
         }
 
+        /* MODAL CLIENT INFO */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 300;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-title {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            opacity: 0.8;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: 'Lato', sans-serif;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #8b7355;
+            box-shadow: 0 0 0 2px rgba(139, 115, 85, 0.1);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-size: 10px;
+            transition: all 0.3s;
+        }
+
+        .modal-buttons .confirm-btn {
+            background: #8b7355;
+            color: white;
+        }
+
+        .modal-buttons .confirm-btn:hover {
+            background: #6b5745;
+        }
+
+        .modal-buttons .cancel-btn {
+            background: #f0f0f0;
+            color: #1a1a1a;
+        }
+
+        .modal-buttons .cancel-btn:hover {
+            background: #e0e0e0;
+        }
+
         /* FOOTER */
         .footer {
             background: #1a1a1a;
@@ -459,12 +600,9 @@
             .products-section {
                 padding: 20px;
             }
-
-            .time-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
         }
     </style>
+
 </head>
 <body>
     <header>
@@ -472,7 +610,7 @@
             <div class="header-left">SALON<br>© 24</div>
             <div class="logo">PREMIUM</div>
             <div class="header-right">
-                <a href="/">← Retour au site</a>
+                <a href="index-final.html">← Retour au site</a>
             </div>
         </div>
     </header>
@@ -546,29 +684,42 @@
         </div>
     </main>
 
+    <!-- MODAL INFOS CLIENT -->
+    <div class="modal" id="clientModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Vos informations</h2>
+            
+            <div class="form-group">
+                <label>Nom complet *</label>
+                <input type="text" id="clientName" placeholder="Jean Dupont">
+            </div>
+
+            <div class="form-group">
+                <label>Email *</label>
+                <input type="email" id="clientEmail" placeholder="jean@example.com">
+            </div>
+
+            <div class="form-group">
+                <label>Téléphone *</label>
+                <input type="tel" id="clientPhone" placeholder="+33 6 12 34 56 78">
+            </div>
+
+            <div class="modal-buttons">
+                <button class="confirm-btn" onclick="confirmBooking()">Confirmer</button>
+                <button class="cancel-btn" onclick="closeModal()">Annuler</button>
+            </div>
+        </div>
+    </div>
+
     <footer class="footer">
         <p>Salon Premium • Dubaï • +971 4 123 456 789</p>
         <p>contact@salon.ae</p>
     </footer>
 
     <script>
-        // Votre code JavaScript complet ici (calendrier, packs, etc.)
-        const packs = [
-            { id: 1, name: 'Essentiel', duration: 30, price: 55, desc: '30 minutes' },
-            { id: 2, name: 'Premium', duration: 90, price: 120, desc: '90 minutes' },
-            { id: 3, name: 'Signature', duration: 120, price: 250, desc: '120 minutes' }
-        ];
-
-        const products = [
-            { id: 1, name: 'Sérum Luxe', price: 45 },
-            { id: 2, name: 'Crème Corps', price: 38 },
-            { id: 3, name: 'Masque Nettoyant', price: 32 },
-            { id: 4, name: 'Vernis Premium', price: 18 },
-            { id: 5, name: 'Huile Capillaire', price: 28 },
-            { id: 6, name: 'Kit Beauté Glow', price: 85 }
-        ];
-
-        const timeSlots = ['09:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
+        const API_URL = 'http://localhost:8000';
+        let allProducts = [];
+        let allPacks = [];
 
         let booking = {
             date: null,
@@ -580,6 +731,24 @@
         let currentMonth = new Date().getMonth();
         let currentYear = new Date().getFullYear();
 
+        // Charger les données depuis l'API
+        async function loadData() {
+            try {
+                const productsRes = await fetch(`${API_URL}/api/products`);
+                const productsData = await productsRes.json();
+                allProducts = productsData.products || [];
+
+                const packsRes = await fetch(`${API_URL}/api/packs`);
+                const packsData = await packsRes.json();
+                allPacks = packsData.packs || [];
+
+                init();
+            } catch (error) {
+                console.error('Erreur chargement:', error);
+                alert('Erreur de connexion au serveur');
+            }
+        }
+
         function init() {
             renderCalendar();
             renderPacks();
@@ -587,6 +756,7 @@
             renderTimeSlots();
         }
 
+        // CALENDAR
         function renderCalendar() {
             const firstDay = new Date(currentYear, currentMonth, 1).getDay();
             const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -637,7 +807,22 @@
             element.classList.add('selected');
             
             booking.date = new Date(currentYear, currentMonth, day);
+            loadAvailableSlots();
             updateSummary();
+        }
+
+        async function loadAvailableSlots() {
+            if (!booking.date) return;
+            
+            try {
+                const dateStr = booking.date.toISOString().split('T')[0];
+                const res = await fetch(`${API_URL}/api/calendar/available/${dateStr}`);
+                const data = await res.json();
+                
+                renderTimeSlots(data.available || []);
+            } catch (error) {
+                console.error('Erreur chargement créneaux:', error);
+            }
         }
 
         function previousMonth() {
@@ -658,14 +843,15 @@
             renderCalendar();
         }
 
+        // PACKS
         function renderPacks() {
             const container = document.getElementById('packOptions');
-            container.innerHTML = packs.map((pack, idx) => `
+            container.innerHTML = allPacks.map((pack, idx) => `
                 <label class="pack-option">
                     <input type="radio" name="pack" value="${pack.id}" onchange="selectPack(${pack.id})">
                     <div>
                         <div class="pack-name">${pack.name}</div>
-                        <div class="pack-details">${pack.desc}</div>
+                        <div class="pack-details">${pack.duration_minutes || pack.duration} minutes</div>
                         <div class="pack-price">${pack.price}€</div>
                     </div>
                 </label>
@@ -673,15 +859,16 @@
         }
 
         function selectPack(packId) {
-            booking.pack = packs.find(p => p.id === packId);
+            booking.pack = allPacks.find(p => p.id === packId);
             updateSummary();
         }
 
+        // PRODUCTS
         function renderProducts() {
             const container = document.getElementById('productsGrid');
-            container.innerHTML = products.map(product => `
+            container.innerHTML = allProducts.map(product => `
                 <label class="product-item">
-                    <input type="checkbox" value="${product.id}" onchange="toggleProduct(${product.id}, this.checked)">
+                    <input type="checkbox" value="${product.id}" onchange="toggleProduct(${product.id}, '${product.name}', ${product.price}, this.checked)">
                     <div class="product-info">
                         <div class="product-name">${product.name}</div>
                         <div class="product-price">${product.price}€</div>
@@ -690,19 +877,22 @@
             `).join('');
         }
 
-        function toggleProduct(productId, checked) {
+        function toggleProduct(productId, productName, price, checked) {
             if (checked) {
-                const product = products.find(p => p.id === productId);
-                booking.products.push(product);
+                booking.products.push({ id: productId, name: productName, price });
             } else {
                 booking.products = booking.products.filter(p => p.id !== productId);
             }
             updateSummary();
         }
 
-        function renderTimeSlots() {
+        // TIME SLOTS
+        function renderTimeSlots(availableSlots = []) {
             const container = document.getElementById('timeGrid');
-            container.innerHTML = timeSlots.map(time => `
+            const timeSlots = ['09:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
+            const slots = availableSlots.length > 0 ? availableSlots : timeSlots;
+            
+            container.innerHTML = slots.map(time => `
                 <div class="time-slot" onclick="selectTime('${time}', this)">${time}</div>
             `).join('');
         }
@@ -714,6 +904,7 @@
             updateSummary();
         }
 
+        // SUMMARY
         function updateSummary() {
             const dateStr = booking.date ? booking.date.toLocaleDateString('fr-FR') : 'Non sélectionnée';
             const packStr = booking.pack ? booking.pack.name : 'Aucune';
@@ -737,31 +928,74 @@
             document.getElementById('summaryTotal').textContent = total + '€';
         }
 
+        // SUBMIT
         function submitBooking() {
             if (!booking.date || !booking.time || !booking.pack) {
                 alert('Veuillez sélectionner une date, une heure et une prestation');
                 return;
             }
 
-            const clientName = prompt('Votre nom complet:');
-            if (!clientName) return;
+            document.getElementById('clientModal').classList.add('active');
+        }
 
-            const clientEmail = prompt('Votre email:');
-            if (!clientEmail) return;
+        function closeModal() {
+            document.getElementById('clientModal').classList.remove('active');
+        }
 
-            const clientPhone = prompt('Votre téléphone:');
-            if (!clientPhone) return;
+        async function confirmBooking() {
+            const clientName = document.getElementById('clientName').value;
+            const clientEmail = document.getElementById('clientEmail').value;
+            const clientPhone = document.getElementById('clientPhone').value;
+
+            if (!clientName || !clientEmail || !clientPhone) {
+                alert('Veuillez remplir tous les champs');
+                return;
+            }
 
             const totalPrice = booking.pack.price + booking.products.reduce((sum, p) => sum + p.price, 0);
 
-            alert(`✅ Réservation confirmée!\n\nDate: ${booking.date.toLocaleDateString('fr-FR')} à ${booking.time}\nPrestation: ${booking.pack.name}\nTotal: ${totalPrice}€\n\nUn email de confirmation sera envoyé à ${clientEmail}`);
-            
-            booking = { date: null, time: null, pack: null, products: [] };
-            init();
+            const reservationData = {
+                clientName,
+                clientEmail,
+                clientPhone,
+                date: booking.date.toISOString().split('T')[0],
+                time: booking.time,
+                packId: booking.pack.id,
+                products: booking.products,
+                totalPrice
+            };
+
+            try {
+                const res = await fetch(`${API_URL}/api/reservations/create`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(reservationData)
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    alert(`✅ Réservation confirmée!\n\nDate: ${reservationData.date} à ${reservationData.time}\nPrestation: ${booking.pack.name}\nTotal: ${totalPrice}€\n\nUn email de confirmation a été envoyé à ${clientEmail}`);
+                    
+                    booking = { date: null, time: null, pack: null, products: [] };
+                    document.getElementById('clientModal').classList.remove('active');
+                    init();
+                    
+                    document.getElementById('clientName').value = '';
+                    document.getElementById('clientEmail').value = '';
+                    document.getElementById('clientPhone').value = '';
+                } else {
+                    alert('Erreur: ' + (data.error || 'Impossible de créer la réservation'));
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('Erreur de connexion au serveur');
+            }
         }
 
-        init();
+        // START
+        loadData();
     </script>
+
 </body>
 </html>
-
