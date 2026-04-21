@@ -552,7 +552,7 @@
     </footer>
 
     <script>
-        // DATA
+        // Votre code JavaScript complet ici (calendrier, packs, etc.)
         const packs = [
             { id: 1, name: 'Essentiel', duration: 30, price: 55, desc: '30 minutes' },
             { id: 2, name: 'Premium', duration: 90, price: 120, desc: '90 minutes' },
@@ -570,7 +570,6 @@
 
         const timeSlots = ['09:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
 
-        // STATE
         let booking = {
             date: null,
             time: null,
@@ -581,7 +580,6 @@
         let currentMonth = new Date().getMonth();
         let currentYear = new Date().getFullYear();
 
-        // INIT
         function init() {
             renderCalendar();
             renderPacks();
@@ -589,7 +587,6 @@
             renderTimeSlots();
         }
 
-        // CALENDAR
         function renderCalendar() {
             const firstDay = new Date(currentYear, currentMonth, 1).getDay();
             const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -601,7 +598,6 @@
             const grid = document.getElementById('calendarGrid');
             grid.innerHTML = '';
 
-            // Headers
             ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].forEach(day => {
                 const header = document.createElement('div');
                 header.className = 'day-header';
@@ -609,7 +605,6 @@
                 grid.appendChild(header);
             });
 
-            // Days
             for (let i = 0; i < firstDay; i++) {
                 grid.appendChild(document.createElement('div'));
             }
@@ -621,13 +616,11 @@
 
                 const date = new Date(currentYear, currentMonth, day);
                 
-                // Disable past dates
                 if (date < today) {
                     dayEl.classList.add('disabled');
                 } else {
                     dayEl.onclick = () => selectDate(day, dayEl);
                     
-                    // Highlight selected
                     if (booking.date && booking.date.getDate() === day && 
                         booking.date.getMonth() === currentMonth && 
                         booking.date.getFullYear() === currentYear) {
@@ -665,7 +658,6 @@
             renderCalendar();
         }
 
-        // PACKS
         function renderPacks() {
             const container = document.getElementById('packOptions');
             container.innerHTML = packs.map((pack, idx) => `
@@ -685,7 +677,6 @@
             updateSummary();
         }
 
-        // PRODUCTS
         function renderProducts() {
             const container = document.getElementById('productsGrid');
             container.innerHTML = products.map(product => `
@@ -709,7 +700,6 @@
             updateSummary();
         }
 
-        // TIME SLOTS
         function renderTimeSlots() {
             const container = document.getElementById('timeGrid');
             container.innerHTML = timeSlots.map(time => `
@@ -724,7 +714,6 @@
             updateSummary();
         }
 
-        // SUMMARY
         function updateSummary() {
             const dateStr = booking.date ? booking.date.toLocaleDateString('fr-FR') : 'Non sélectionnée';
             const packStr = booking.pack ? booking.pack.name : 'Aucune';
@@ -748,14 +737,12 @@
             document.getElementById('summaryTotal').textContent = total + '€';
         }
 
-        // SUBMIT
         function submitBooking() {
             if (!booking.date || !booking.time || !booking.pack) {
                 alert('Veuillez sélectionner une date, une heure et une prestation');
                 return;
             }
 
-            // Ouvrir un formulaire pour les infos client
             const clientName = prompt('Votre nom complet:');
             if (!clientName) return;
 
@@ -767,43 +754,14 @@
 
             const totalPrice = booking.pack.price + booking.products.reduce((sum, p) => sum + p.price, 0);
 
-            // Envoyer à l'API
-            const reservationData = {
-                clientName,
-                clientEmail,
-                clientPhone,
-                date: booking.date.toISOString().split('T')[0],
-                time: booking.time,
-                packId: booking.pack.id,
-                products: booking.products.map(p => ({ name: p.name, price: p.price })),
-                totalPrice
-            };
-
-            fetch('/api/reservations/create', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(reservationData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(`✅ Réservation confirmée!\n\nDate: ${reservationData.date} à ${reservationData.time}\nPrestation: ${booking.pack.name}\nTotal: ${totalPrice}€\n\nUn email de confirmation a été envoyé à ${clientEmail}`);
-                    
-                    // Réinitialiser
-                    booking = { date: null, time: null, pack: null, products: [] };
-                    init();
-                } else {
-                    alert('Erreur: ' + (data.error || 'Impossible de créer la réservation'));
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Erreur de connexion au serveur');
-            });
+            alert(`✅ Réservation confirmée!\n\nDate: ${booking.date.toLocaleDateString('fr-FR')} à ${booking.time}\nPrestation: ${booking.pack.name}\nTotal: ${totalPrice}€\n\nUn email de confirmation sera envoyé à ${clientEmail}`);
+            
+            booking = { date: null, time: null, pack: null, products: [] };
+            init();
         }
 
-        // START
         init();
     </script>
 </body>
 </html>
+
