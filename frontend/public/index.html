@@ -322,6 +322,7 @@
             justify-content: center;
             max-width: 900px;
             margin: 0 auto;
+            overflow: hidden;
         }
 
         .carousel-inner {
@@ -329,6 +330,7 @@
             width: 100%;
             height: 100%;
             transform-style: preserve-3d;
+            perspective: 1000px;
         }
 
         .carousel-item {
@@ -341,31 +343,56 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 70px;
             transform-style: preserve-3d;
             transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.8s ease;
             left: 50%;
             top: 50%;
             transform: translateX(-50%) translateY(-50%) rotateY(0deg) translateZ(0px);
-            opacity: 0.25;
+            opacity: 0;
             z-index: 0;
+            pointer-events: none;
+            visibility: hidden;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .carousel-placeholder {
+            font-size: 70px;
+            letter-spacing: 0.5em;
+            line-height: 1.1;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         .carousel-item.active {
             opacity: 1;
             z-index: 10;
+            visibility: visible;
             transform: translateX(-50%) translateY(-50%) rotateY(0deg) translateZ(80px) scale(1.08);
+            pointer-events: auto;
         }
 
         .carousel-item.prev {
             opacity: 0.5;
             z-index: 5;
+            visibility: visible;
             transform: translateX(-50%) translateY(-50%) rotateY(40deg) translateZ(0px);
         }
 
         .carousel-item.next {
             opacity: 0.5;
             z-index: 5;
+            visibility: visible;
             transform: translateX(-50%) translateY(-50%) rotateY(-40deg) translateZ(0px);
         }
 
@@ -564,7 +591,7 @@
                 width: 60%;
                 max-width: 400px;
                 height: 360px;
-                font-size: 120px;
+                font-size: 80px;
             }
         }
 
@@ -611,21 +638,11 @@
         }
 
         @keyframes liquidWave {
-            0% {
-                transform: translate(0, 0);
-            }
-            25% {
-                transform: translate(50px, 30px);
-            }
-            50% {
-                transform: translate(100px, 0);
-            }
-            75% {
-                transform: translate(50px, -30px);
-            }
-            100% {
-                transform: translate(0, 0);
-            }
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(50px, 30px); }
+            50% { transform: translate(100px, 0); }
+            75% { transform: translate(50px, -30px); }
+            100% { transform: translate(0, 0); }
         }
 
         /* SHOP/BOUTIQUE */
@@ -663,8 +680,39 @@
             font-weight: 400;
             text-align: center;
             color: #2a2a2a;
-            margin-bottom: 45px;
+            margin-bottom: 8px;
             letter-spacing: -0.3px;
+        }
+
+        /* CATÉGORIES EN HAUT */
+        .shop-categories {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 35px;
+            flex-wrap: wrap;
+            margin-top: -5px;
+        }
+
+        .category-btn {
+            padding: 6px 14px;
+            border: 1px solid #d4a574;
+            background: white;
+            border-radius: 18px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            transition: all 0.3s;
+            color: #8b7355;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: #8b7355;
+            color: white;
+            border-color: #8b7355;
         }
 
         .shop-grid {
@@ -683,6 +731,16 @@
             flex-direction: column;
             height: 100%;
             box-shadow: 0 4px 12px rgba(139, 115, 85, 0.08);
+        }
+
+        .shop-card[data-category="kits"] {
+            order: 100;
+        }
+
+        .shop-card[data-category="serums"],
+        .shop-card[data-category="ongles"],
+        .shop-card[data-category="cheveux"] {
+            order: 1;
         }
 
         .shop-card:hover {
@@ -764,7 +822,17 @@
             }
 
             .shop-title {
-                margin-bottom: 35px;
+                margin-bottom: 25px;
+            }
+
+            .shop-categories {
+                gap: 8px;
+                margin-bottom: 30px;
+            }
+
+            .category-btn {
+                padding: 6px 12px;
+                font-size: 9px;
             }
 
             .shop-grid {
@@ -801,6 +869,9 @@
                 font-size: 8px;
             }
         }
+
+        /* SOCIAL */
+        .social-section {
             text-align: center;
             max-width: 800px;
             margin: 80px auto;
@@ -810,27 +881,26 @@
         .social-links {
             display: flex;
             justify-content: center;
-            gap: 28px;
+            gap: 16px;
             flex-wrap: wrap;
         }
 
         .social-link {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
             text-decoration: none;
             color: #1a1a1a;
             transition: all 0.3s;
         }
 
         .social-icon {
-            width: 54px;
-            height: 54px;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 16px;
             background: #f8f8f8;
             border: 1px solid #f0f0f0;
             border-radius: 50%;
@@ -845,10 +915,10 @@
         }
 
         .social-label {
-            font-size: 9px;
+            font-size: 8px;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.4px;
             opacity: 0.6;
             transition: opacity 0.3s;
         }
@@ -1208,20 +1278,120 @@
             <h2 class="section-title">Gallery</h2>
             <div class="carousel-wrapper">
                 <div class="carousel-inner" id="carouselInner">
-                    <div class="carousel-item active">💆</div>
-                    <div class="carousel-item">✨</div>
-                    <div class="carousel-item">💅</div>
-                    <div class="carousel-item">🌺</div>
-                    <div class="carousel-item">🧖</div>
-                    <div class="carousel-item">💄</div>
-                    <div class="carousel-item">🌸</div>
-                    <div class="carousel-item">💆‍♀️</div>
+                    <div class="carousel-item active">
+                        <img src="https://i.imgur.com/3KllW7E.jpeg" alt="Service 1">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://i.imgur.com/3KllW7E.jpeg" alt="Service 2">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://i.imgur.com/3KllW7E.jpeg" alt="Service 3">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://i.imgur.com/3KllW7E.jpeg" alt="Service 4">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://i.imgur.com/3KllW7E.jpeg" alt="Service 5">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://i.imgur.com/3KllW7E.jpeg" alt="Service 6">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://i.imgur.com/3KllW7E.jpeg" alt="Service 7">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://i.imgur.com/3KllW7E.jpeg" alt="Service 8">
+                    </div>
                 </div>
             </div>
             <div class="carousel-controls">
                 <button class="carousel-btn" id="prevBtn">←</button>
                 <div class="carousel-dots" id="dots"></div>
                 <button class="carousel-btn" id="nextBtn">→</button>
+            </div>
+        </section>
+
+        <!-- SHOP/BOUTIQUE -->
+        <section class="shop-section" id="shop">
+            <div class="liquid-bg">
+                <div class="liquid-shape"></div>
+                <div class="liquid-shape"></div>
+                <div class="liquid-shape"></div>
+            </div>
+            <div class="shop-container">
+                <h2 class="shop-title">Notre Boutique</h2>
+
+                <!-- CATÉGORIES -->
+                <div class="shop-categories">
+                    <button class="category-btn active" onclick="filterCategory('all', this)">Tous les produits</button>
+                    <button class="category-btn" onclick="filterCategory('serums', this)">Sérums & Crèmes</button>
+                    <button class="category-btn" onclick="filterCategory('cheveux', this)">Cheveux</button>
+                    <button class="category-btn" onclick="filterCategory('ongles', this)">Ongles</button>
+                    <button class="category-btn" onclick="filterCategory('kits', this)">Kits</button>
+                </div>
+
+                <!-- PRODUITS -->
+                <div class="shop-grid" id="shopGrid">
+                    <div class="shop-card" data-category="serums">
+                        <div class="shop-image">💄</div>
+                        <div class="shop-content">
+                            <h3 class="shop-name">Sérum Luxe</h3>
+                            <p class="shop-desc">Sérum facial premium avec huiles naturelles</p>
+                            <div class="shop-price">45€</div>
+                            <button class="shop-btn" onclick="addToCart('Sérum Luxe', 45)">AJOUTER AU PANIER</button>
+                        </div>
+                    </div>
+
+                    <div class="shop-card" data-category="serums">
+                        <div class="shop-image">🧴</div>
+                        <div class="shop-content">
+                            <h3 class="shop-name">Crème Corps</h3>
+                            <p class="shop-desc">Crème nourrissante pour peau douce</p>
+                            <div class="shop-price">38€</div>
+                            <button class="shop-btn" onclick="addToCart('Crème Corps', 38)">AJOUTER AU PANIER</button>
+                        </div>
+                    </div>
+
+                    <div class="shop-card" data-category="serums">
+                        <div class="shop-image">🧖</div>
+                        <div class="shop-content">
+                            <h3 class="shop-name">Masque Nettoyant</h3>
+                            <p class="shop-desc">Masque purifiant pour le visage</p>
+                            <div class="shop-price">32€</div>
+                            <button class="shop-btn" onclick="addToCart('Masque Nettoyant', 32)">AJOUTER AU PANIER</button>
+                        </div>
+                    </div>
+
+                    <div class="shop-card" data-category="ongles">
+                        <div class="shop-image">💅</div>
+                        <div class="shop-content">
+                            <h3 class="shop-name">Vernis Premium</h3>
+                            <p class="shop-desc">Vernis longue tenue haut de gamme</p>
+                            <div class="shop-price">18€</div>
+                            <button class="shop-btn" onclick="addToCart('Vernis Premium', 18)">AJOUTER AU PANIER</button>
+                        </div>
+                    </div>
+
+                    <div class="shop-card" data-category="cheveux">
+                        <div class="shop-image">🌿</div>
+                        <div class="shop-content">
+                            <h3 class="shop-name">Huile Capillaire</h3>
+                            <p class="shop-desc">Huiles naturelles pour soin cheveux</p>
+                            <div class="shop-price">28€</div>
+                            <button class="shop-btn" onclick="addToCart('Huile Capillaire', 28)">AJOUTER AU PANIER</button>
+                        </div>
+                    </div>
+
+                    <div class="shop-card" data-category="kits">
+                        <div class="shop-image">✨</div>
+                        <div class="shop-content">
+                            <h3 class="shop-name">Kit Beauté Glow</h3>
+                            <p class="shop-desc">Kit complet de soins beauté</p>
+                            <div class="shop-price">85€</div>
+                            <button class="shop-btn" onclick="addToCart('Kit Beauté Glow', 85)">AJOUTER AU PANIER</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -1285,71 +1455,81 @@
                 <div class="liquid-shape"></div>
             </div>
             <div class="shop-container">
-                <h2 class="shop-title">Our Boutique</h2>
-                <div class="shop-grid">
-                    <div class="shop-card">
+                <h2 class="shop-title">Notre Boutique</h2>
+
+                <!-- CATÉGORIES -->
+                <div class="shop-categories">
+                    <button class="category-btn active" onclick="filterCategory('all', this)">Tous les produits</button>
+                    <button class="category-btn" onclick="filterCategory('serums', this)">Sérums & Crèmes</button>
+                    <button class="category-btn" onclick="filterCategory('cheveux', this)">Cheveux</button>
+                    <button class="category-btn" onclick="filterCategory('ongles', this)">Ongles</button>
+                    <button class="category-btn" onclick="filterCategory('kits', this)">Kits</button>
+                </div>
+
+                <!-- PRODUITS -->
+                <div class="shop-grid" id="shopGrid">
+                    <div class="shop-card" data-category="serums">
                         <div class="shop-image">💄</div>
                         <div class="shop-content">
-                            <h3 class="shop-name">Luxury Serum</h3>
-                            <p class="shop-desc">Premium facial serum with natural oils</p>
+                            <h3 class="shop-name">Sérum Luxe</h3>
+                            <p class="shop-desc">Sérum facial premium avec huiles naturelles</p>
                             <div class="shop-price">45€</div>
-                            <button class="shop-btn">Add to Cart</button>
+                            <button class="shop-btn" onclick="addToCart('Sérum Luxe', 45)">AJOUTER AU PANIER</button>
                         </div>
                     </div>
 
-                    <div class="shop-card">
+                    <div class="shop-card" data-category="serums">
                         <div class="shop-image">🧴</div>
                         <div class="shop-content">
-                            <h3 class="shop-name">Body Cream</h3>
-                            <p class="shop-desc">Nourishing cream for soft skin</p>
+                            <h3 class="shop-name">Crème Corps</h3>
+                            <p class="shop-desc">Crème nourrissante pour peau douce</p>
                             <div class="shop-price">38€</div>
-                            <button class="shop-btn">Add to Cart</button>
+                            <button class="shop-btn" onclick="addToCart('Crème Corps', 38)">AJOUTER AU PANIER</button>
                         </div>
                     </div>
 
-                    <div class="shop-card">
-                        <div class="shop-image">💅</div>
-                        <div class="shop-content">
-                            <h3 class="shop-name">Nail Polish</h3>
-                            <p class="shop-desc">Long-lasting premium polish</p>
-                            <div class="shop-price">18€</div>
-                            <button class="shop-btn">Add to Cart</button>
-                        </div>
-                    </div>
-
-                    <div class="shop-card">
+                    <div class="shop-card" data-category="serums">
                         <div class="shop-image">🧖</div>
                         <div class="shop-content">
-                            <h3 class="shop-name">Mask Treatment</h3>
-                            <p class="shop-desc">Deep cleansing face mask</p>
+                            <h3 class="shop-name">Masque Nettoyant</h3>
+                            <p class="shop-desc">Masque purifiant pour le visage</p>
                             <div class="shop-price">32€</div>
-                            <button class="shop-btn">Add to Cart</button>
+                            <button class="shop-btn" onclick="addToCart('Masque Nettoyant', 32)">AJOUTER AU PANIER</button>
                         </div>
                     </div>
 
-                    <div class="shop-card">
+                    <div class="shop-card" data-category="ongles">
+                        <div class="shop-image">💅</div>
+                        <div class="shop-content">
+                            <h3 class="shop-name">Vernis Premium</h3>
+                            <p class="shop-desc">Vernis longue tenue haut de gamme</p>
+                            <div class="shop-price">18€</div>
+                            <button class="shop-btn" onclick="addToCart('Vernis Premium', 18)">AJOUTER AU PANIER</button>
+                        </div>
+                    </div>
+
+                    <div class="shop-card" data-category="cheveux">
                         <div class="shop-image">🌿</div>
                         <div class="shop-content">
-                            <h3 class="shop-name">Hair Oil</h3>
-                            <p class="shop-desc">Natural oils for hair care</p>
+                            <h3 class="shop-name">Huile Capillaire</h3>
+                            <p class="shop-desc">Huiles naturelles pour soin cheveux</p>
                             <div class="shop-price">28€</div>
-                            <button class="shop-btn">Add to Cart</button>
+                            <button class="shop-btn" onclick="addToCart('Huile Capillaire', 28)">AJOUTER AU PANIER</button>
                         </div>
                     </div>
 
-                    <div class="shop-card">
+                    <div class="shop-card" data-category="kits">
                         <div class="shop-image">✨</div>
                         <div class="shop-content">
-                            <h3 class="shop-name">Glow Set</h3>
-                            <p class="shop-desc">Complete beauty care kit</p>
+                            <h3 class="shop-name">Kit Beauté Glow</h3>
+                            <p class="shop-desc">Kit complet de soins beauté</p>
                             <div class="shop-price">85€</div>
-                            <button class="shop-btn">Add to Cart</button>
+                            <button class="shop-btn" onclick="addToCart('Kit Beauté Glow', 85)">AJOUTER AU PANIER</button>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-
         <!-- SOCIAL -->
         <section class="social-section" id="social">
             <h2 class="section-title">Follow Us</h2>
@@ -1463,6 +1643,44 @@
         document.getElementById('nextBtn').addEventListener('click', next);
         document.getElementById('prevBtn').addEventListener('click', prev);
         setInterval(next, 5000);
+
+        // BOUTIQUE - FILTER
+        function filterCategory(category, btn) {
+            const cards = document.querySelectorAll('.shop-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        // PANIER
+        function addToCart(name, price) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: #8b7355;
+                color: white;
+                padding: 16px 24px;
+                border-radius: 8px;
+                box-shadow: 0 4px 16px rgba(139, 115, 85, 0.3);
+                z-index: 1000;
+                font-size: 12px;
+                font-weight: 600;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = `✓ ${name} ajouté au panier`;
+            document.body.appendChild(notification);
+
+            setTimeout(() => notification.remove(), 3000);
+        }
 
         // PARTICLES
         const container = document.getElementById('particles');
