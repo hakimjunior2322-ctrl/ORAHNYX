@@ -1,1 +1,84 @@
+version: '3.9'
 
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: salon-premium-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: salon_user
+      POSTGRES_PASSWORD: salon_password
+      POSTGRES_DB: salon_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U salon_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../docker/Dockerfile.backend
+    container_name: salon-premium-api
+    ports:
+      - "8000:8000"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://salon_user:salon_password@postgres:5432/salon_db
+      JWT_SECRET: your_super_secret_key_change_this
+      STRIPE_SECRET_KEY: your_stripe_key
+      PORT: 8000
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    restart: always
+    command: npm run start:prod
+
+  # Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/Dockerfile.frontend
+    container_name: salon-premium-web
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+      NODE_ENV: production
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    restart: always
+    command: npm run start
+
+  # Redis Cache (Optional)
+  redis:
+    image: redis:7-alpine
+    container_name: salon-premium-cache
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: always
+
+  # Nginx Reverse Proxy (Pour VPS)
+  nginx:
+    image: nginx:alpine
+    container_name: salon-premium-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx​​​​​​​​​​​​​​​​
