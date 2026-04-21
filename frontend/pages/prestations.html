@@ -1,0 +1,632 @@
+<!-- frontend/pages/prestations.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prestations - Salon Premium</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: #ffffff;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-family: 'Bodoni Moda', serif;
+      font-size: 48px;
+      text-align: center;
+      margin-bottom: 50px;
+      color: #1a1a1a;
+    }
+
+    /* PRESTATIONS GRID */
+    .prestations-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+
+    .prestation-card {
+      background: white;
+      border: 1px solid #e8dfd0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(139, 115, 85, 0.08);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .prestation-card:hover {
+      border-color: #d4a574;
+      box-shadow: 0 12px 30px rgba(139, 115, 85, 0.15);
+      transform: translateY(-6px);
+    }
+
+    .prestation-image {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, #e8dfd0 0%, #d4c5b5 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+    }
+
+    .prestation-content {
+      padding: 24px;
+    }
+
+    .prestation-name {
+      font-family: 'Bodoni Moda', serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+    }
+
+    .prestation-desc {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .prestation-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e8dfd0;
+    }
+
+    .prestation-price {
+      font-family: 'Bodoni Moda', serif;
+      font-size: 24px;
+      font-weight: 400;
+      color: #8b7355;
+    }
+
+    .prestation-duration {
+      font-size: 12px;
+      color: #999;
+      align-self: flex-end;
+    }
+
+    .btn-reserver {
+      width: 100%;
+      padding: 12px;
+      background: #8b7355;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      font-size: 12px;
+      transition: background 0.3s;
+    }
+
+    .btn-reserver:hover {
+      background: #6b5745;
+    }
+
+    /* MODAL RÉSERVATION */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 40px;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .modal-title {
+      font-family: 'Bodoni Moda', serif;
+      font-size: 32px;
+      margin-bottom: 30px;
+      color: #1a1a1a;
+    }
+
+    /* LOCATION TYPE */
+    .location-choice {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .location-btn {
+      padding: 16px;
+      border: 2px solid #e8dfd0;
+      background: white;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.3s;
+      font-weight: 600;
+    }
+
+    .location-btn.active {
+      border-color: #8b7355;
+      background: #f8f6f3;
+    }
+
+    /* FORMULAIRE */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #1a1a1a;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e8dfd0;
+      border-radius: 4px;
+      font-family: 'Lato', sans-serif;
+      font-size: 14px;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #8b7355;
+      box-shadow: 0 0 0 3px rgba(139, 115, 85, 0.1);
+    }
+
+    /* CALENDRIER */
+    .calendar-section {
+      margin-bottom: 30px;
+    }
+
+    .calendar-header {
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #1a1a1a;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #e8dfd0;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .calendar-day:hover {
+      border-color: #8b7355;
+      background: #f8f6f3;
+    }
+
+    .calendar-day.selected {
+      background: #8b7355;
+      color: white;
+      border-color: #8b7355;
+    }
+
+    .calendar-day.disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    /* HEURES DISPONIBLES */
+    .time-slots {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 8px;
+      margin-bottom: 30px;
+    }
+
+    .time-slot {
+      padding: 10px;
+      border: 1px solid #e8dfd0;
+      text-align: center;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.3s;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .time-slot:hover:not(.disabled) {
+      border-color: #8b7355;
+      background: #f8f6f3;
+    }
+
+    .time-slot.selected {
+      background: #8b7355;
+      color: white;
+      border-color: #8b7355;
+    }
+
+    .time-slot.disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    /* RÉCAPITULATIF */
+    .recap {
+      background: #f8f6f3;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+
+    .recap-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+
+    .recap-item.total {
+      border-top: 1px solid #e8dfd0;
+      padding-top: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      color: #8b7355;
+    }
+
+    .btn-confirmer {
+      width: 100%;
+      padding: 14px;
+      background: #8b7355;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      transition: background 0.3s;
+    }
+
+    .btn-confirmer:hover {
+      background: #6b5745;
+    }
+
+    .btn-confirmer:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+      .modal-content {
+        padding: 24px;
+      }
+
+      .location-choice {
+        grid-template-columns: 1fr;
+      }
+
+      .prestations-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Nos Prestations</h1>
+
+    <div class="prestations-grid" id="prestationsGrid"></div>
+  </div>
+
+  <!-- MODAL RÉSERVATION -->
+  <div class="modal" id="modalReservation">
+    <div class="modal-content">
+      <button class="modal-close" id="closeModal">&times;</button>
+      
+      <h2 class="modal-title" id="modalTitle">Réserver</h2>
+
+      <!-- CHOIX LIEU -->
+      <div class="location-choice" id="locationChoice">
+        <button class="location-btn active" data-type="boutique">
+          📍 En boutique
+        </button>
+        <button class="location-btn" data-type="domicile">
+          🏠 À domicile
+        </button>
+      </div>
+
+      <!-- FORMULAIRE CLIENT -->
+      <form id="reservationForm">
+        <div class="form-group">
+          <label>Nom *</label>
+          <input type="text" name="client_name" required>
+        </div>
+
+        <div class="form-group">
+          <label>Prénom *</label>
+          <input type="text" name="client_firstname" required>
+        </div>
+
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" name="client_email" required>
+        </div>
+
+        <div class="form-group">
+          <label>Téléphone *</label>
+          <input type="tel" name="client_phone" required>
+        </div>
+
+        <div class="form-group" id="addressGroup" style="display: none;">
+          <label>Adresse (domicile)</label>
+          <input type="text" name="client_address">
+        </div>
+
+        <!-- CALENDRIER -->
+        <div class="calendar-section">
+          <div class="calendar-header">Sélectionner une date</div>
+          <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
+
+        <!-- HEURES DISPONIBLES -->
+        <div class="calendar-section">
+          <div class="calendar-header">Sélectionner une heure</div>
+          <div class="time-slots" id="timeSlots"></div>
+        </div>
+
+        <!-- RÉCAPITULATIF -->
+        <div class="recap">
+          <div class="recap-item">
+            <span>Prestation:</span>
+            <span id="recapPrestation">-</span>
+          </div>
+          <div class="recap-item">
+            <span>Date:</span>
+            <span id="recapDate">-</span>
+          </div>
+          <div class="recap-item">
+            <span>Heure:</span>
+            <span id="recapTime">-</span>
+          </div>
+          <div class="recap-item" id="recapKmItem" style="display: none;">
+            <span>Frais déplacement:</span>
+            <span id="recapKm">-</span>
+          </div>
+          <div class="recap-item total">
+            <span>TOTAL:</span>
+            <span id="recapTotal">0€</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-confirmer" id="btnConfirm">CONFIRMER</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = '/api';
+    let selectedPrestation = null;
+    let selectedDate = null;
+    let selectedTime = null;
+    let locationType = 'boutique';
+    let prestations = [];
+
+    // CHARGER PRESTATIONS
+    async function loadPrestations() {
+      try {
+        const response = await fetch(`${API_URL}/prestations`);
+        prestations = await response.json();
+        displayPrestations();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    function displayPrestations() {
+      const grid = document.getElementById('prestationsGrid');
+      grid.innerHTML = prestations.map(p => `
+        <div class="prestation-card" onclick="openReservationModal(${p.id})">
+          <div class="prestation-image">${p.category === 'ongles' ? '💅' : p.category === 'cheveux' ? '✨' : '💆'}</div>
+          <div class="prestation-content">
+            <div class="prestation-name">${p.name}</div>
+            <div class="prestation-desc">${p.description}</div>
+            <div class="prestation-info">
+              <div class="prestation-price">${p.price}€</div>
+              <div class="prestation-duration">${p.duration_minutes} min</div>
+            </div>
+            <button class="btn-reserver">RÉSERVER</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openReservationModal(prestationId) {
+      selectedPrestation = prestations.find(p => p.id === prestationId);
+      document.getElementById('modalTitle').textContent = `Réserver: ${selectedPrestation.name}`;
+      document.getElementById('modalReservation').classList.add('active');
+      loadCalendar();
+    }
+
+    function loadCalendar() {
+      const grid = document.getElementById('calendarGrid');
+      const today = new Date();
+      grid.innerHTML = '';
+
+      for (let i = 0; i < 42; i++) {
+        const date = new Date(today);
+        date.setDate(date.getDate() + i);
+        const dayNum = date.getDate();
+        const day = document.createElement('div');
+        day.className = 'calendar-day';
+        day.textContent = dayNum;
+        day.onclick = () => selectDate(date);
+        grid.appendChild(day);
+      }
+    }
+
+    function selectDate(date) {
+      selectedDate = date;
+      document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
+      event.target.classList.add('selected');
+      loadTimeSlots();
+      updateRecap();
+    }
+
+    function loadTimeSlots() {
+      const slots = document.getElementById('timeSlots');
+      slots.innerHTML = '';
+
+      for (let hour = 9; hour <= 18; hour++) {
+        const time = `${String(hour).padStart(2, '0')}:00`;
+        const btn = document.createElement('div');
+        btn.className = 'time-slot';
+        btn.textContent = time;
+        btn.onclick = () => selectTime(time, btn);
+        slots.appendChild(btn);
+      }
+    }
+
+    function selectTime(time, element) {
+      selectedTime = time;
+      document.querySelectorAll('.time-slot').forEach(t => t.classList.remove('selected'));
+      element.classList.add('selected');
+      updateRecap();
+    }
+
+    function updateRecap() {
+      document.getElementById('recapPrestation').textContent = selectedPrestation?.name || '-';
+      document.getElementById('recapDate').textContent = selectedDate ? selectedDate.toLocaleDateString('fr-FR') : '-';
+      document.getElementById('recapTime').textContent = selectedTime || '-';
+      
+      let total = selectedPrestation?.price || 0;
+      if (locationType === 'domicile') {
+        document.getElementById('recapKmItem').style.display = 'flex';
+        document.getElementById('recapKm').textContent = '15€';
+        total += 15;
+      } else {
+        document.getElementById('recapKmItem').style.display = 'none';
+      }
+      
+      document.getElementById('recapTotal').textContent = `${total}€`;
+    }
+
+    // LOCATION TYPE
+    document.querySelectorAll('.location-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.location-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        locationType = btn.dataset.type;
+        
+        const addressGroup = document.getElementById('addressGroup');
+        addressGroup.style.display = locationType === 'domicile' ? 'block' : 'none';
+        
+        updateRecap();
+      });
+    });
+
+    // SUBMIT FORMULAIRE
+    document.getElementById('reservationForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const data = {
+        prestation_id: selectedPrestation.id,
+        client_name: formData.get('client_name'),
+        client_email: formData.get('client_email'),
+        client_phone: formData.get('client_phone'),
+        client_address: formData.get('client_address') || null,
+        reservation_date: selectedDate.toISOString().split('T')[0],
+        reservation_time: selectedTime,
+        location_type: locationType,
+        total_price: parseFloat(document.getElementById('recapTotal').textContent)
+      };
+
+      try {
+        const response = await fetch(`${API_URL}/reservations`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          alert('Réservation confirmée! Un email a été envoyé.');
+          document.getElementById('modalReservation').classList.remove('active');
+          e.target.reset();
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Erreur lors de la réservation');
+      }
+    });
+
+    document.getElementById('closeModal').addEventListener('click', () => {
+      document.getElementById('modalReservation').classList.remove('active');
+    });
+
+    loadPrestations();
+  </script>
+</body>
+</html>
