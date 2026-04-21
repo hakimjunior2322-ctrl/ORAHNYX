@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salon Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700&family=Lato:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+            overflow-x: hidden;
+        }
+
+        /* PARTICLES */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            background: rgba(26, 26, 26, 0.08);
+            border-radius: 50%;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(100vh); }
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(var(--sway)); }
+        }
+
+        .particle {
+            animation: fall linear 1 forwards, sway 4s ease-in-out infinite;
+        }
+
+        /* HEADER */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .header-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        .header-left {
+            font-size: 7px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            line-height: 1.2;
+            opacity: 0.7;
+        }
+
+        .logo {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Bodoni Moda', serif;
+            font-size: 10px;
+            font-weight: 400;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            font-size: 8px;
+            font-weight: 500;
+            letter-spacing: 0.4px;
+        }
+
+        .header-right a {
+            color: #1a1a1a;
+            text-decoration: none;
+            transition: opacity 0.3s;
+            white-space: nowrap;
+            opacity: 0.7;
+        }
+
+        .header-right a:hover {
+            opacity: 1;
+        }
+
+        /* BURGER */
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 3px;
+            z-index: 101;
+        }
+
+        .burger-line {
+            width: 18px;
+            height: 1.5px;
+            background: #1a1a1a;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        .burger-menu.active .burger-line:nth-child(1) {
+            transform: rotate(45deg) translateY(8px);
+        }
+
+        .burger-menu.active .burger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-menu.active .burger-line:nth-child(3) {
+            transform: rotate(-45deg) translateY(-8px);
+        }
+
+        /* MOBILE MENU */
+        .mobile-menu {
+            position: fixed;
+            top: 50px;
+            left: -100%;
+            width: 100%;
+            height: calc(100vh - 50px);
+            background: #ffffff;
+            z-index: 99;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .mobile-menu.open {
+            left: 0;
+        }
+
+        .mobile-menu-content {
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .mobile-menu a {
+            font-size: 11px;
+            color: #1a1a1a;
+            text-decoration: none;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+
+        .mobile-menu a:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .burger-menu {
+                display: flex;
+            }
+
+            .header-right {
+                display: none;
+            }
+        }
+
+        /* MAIN */
+        main {
+            position: relative;
+            z-index: 2;
+            margin-top: 50px;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 55vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            background: transparent;
+            margin: 40px 0;
+        }
+
+        .hero-frame {
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 20px 0;
+            width: 100%;
+            box-shadow: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .hero-frame:hover {
+            box-shadow: none;
+            border-color: transparent;
+        }
+
+        .hero-left {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .hero-title {
+            font-family: 'Bodoni Moda', serif;
+            font-size: clamp(24px, 7vw, 36px);
+            font-weight: 400;
+            line-height: 1.2;
+            letter-spacing: -0.3px;
+            margin-bottom: 10px;
+            text-align: left;
+            color: #1a1a1a;
+        }
+
+        .hero-desc {
+            font-size: 11px;
+            color: #888;
+            line-height: 1.6;
+            letter-spacing: 0.2px;
+            text-align: left;
+        }
+
+        .hero-middle {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-emoji {
+            font-size: clamp(45px, 8vw, 60px);
+            opacity: 0.7;
+        }
+
+        .hero-right {
+            flex: 0 0 auto;
+        }
+
+        .cta-button {
+            padding: 12px 36px;
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            transition: all 0.3s;
+            display: inline-block;
+            margin-top: 12px;
+        }
+
+        .cta-button:hover {
+            background: #333;
+            transform: translateY(-1px);
+        }
+
+        /* SECTION */
+        .section {
+            margin: 80px 10px;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-family: 'Bodoni Moda', serif;
+            font-size: clamp(22px, 5vw, 32px);
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 45px;
+            letter-spacing: -0.2px;
+            opacity: 0.95;
+        }
+
+        /* CAROUSEL */
+        .carousel-section {
+            perspective: 1200px;
+        }
+
+        .carousel-wrapper {
+            position: relative;
+            height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .carousel-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+        }
+
+        .carousel-item {
+            position: absolute;
+            width: 75%;
+            max-width: 260px;
+            height: 260px;
+            background: #f8f8f8;
+            border: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 70px;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.8s ease;
+            left: 50%;
+            top: 50%;
+            transform: translateX(-50%) translateY(-50%) rotateY(0deg) translateZ(0px);
+            opacity: 0.25;
+            z-index: 0;
+        }
+
+        .carousel-item.active {
+            opacity: 1;
+            z-index: 10;
+            transform: translateX(-50%) translateY(-50%) rotateY(0deg) translateZ(80px) scale(1.08);
+        }
+
+        .carousel-item.prev {
+            opacity: 0.5;
+            z-index: 5;
+            transform: translateX(-50%) translateY(-50%) rotateY(40deg) translateZ(0px);
+        }
+
+        .carousel-item.next {
+            opacity: 0.5;
+            z-index: 5;
+            transform: translateX(-50%) translateY(-50%) rotateY(-40deg) translateZ(0px);
+        }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 18px;
+            margin-top: 35px;
+        }
+
+        .carousel-btn {
+            width: 36px;
+            height: 36px;
+            background: #f8f8f8;
+            border: 1px solid #f0f0f0;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .carousel-btn:hover {
+            background: #1a1a1a;
+            color: white;
+            border-color: #1a1a1a;
+        }
+
+        .carousel-dots {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: #d0d0d0;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            background: #1a1a1a;
+            width: 20px;
+            border-radius: 3px;
+        }
+
+        /* PRICING */
+        .pricing-section {
+            max-width: 1100px;
+            margin: 80px auto;
+            padding: 0 20px;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .pricing-card {
+            background: #ffffff;
+            border: 1px solid #f0f0f0;
+            padding: 35px 28px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+            border-radius: 8px;
+            position: relative;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+
+        .pricing-card:hover {
+            border-color: #ddd;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            transform: rotateX(5deg) rotateY(-5deg) translateZ(20px);
+        }
+
+        .pricing-card.featured {
+            border: 1.5px solid #1a1a1a;
+            background: #f9f9f9;
+        }
+
+        .pricing-card.featured:hover {
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+            transform: rotateX(5deg) rotateY(-5deg) translateZ(25px);
+        }
+
+        .pricing-label {
+            display: inline-block;
+            padding: 4px 11px;
+            background: #f0f0f0;
+            color: #1a1a1a;
+            font-size: 7px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 14px;
+            border-radius: 3px;
+        }
+
+        .pricing-card.featured .pricing-label {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .pricing-name {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 20px;
+            font-weight: 400;
+            margin-bottom: 6px;
+            letter-spacing: -0.2px;
+        }
+
+        .pricing-desc {
+            font-size: 10px;
+            color: #999;
+            margin-bottom: 16px;
+        }
+
+        .pricing-price {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 26px;
+            font-weight: 400;
+            color: #1a1a1a;
+            margin-bottom: 2px;
+        }
+
+        .pricing-period {
+            font-size: 8px;
+            color: #aaa;
+            margin-bottom: 18px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 22px;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 7px 0;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 9px;
+            color: #777;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: #1a1a1a;
+            font-weight: 700;
+            font-size: 10px;
+            opacity: 0.8;
+        }
+
+        .pricing-button {
+            width: 100%;
+            padding: 10px 16px;
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+
+        .pricing-button:hover {
+            background: #333;
+        }
+
+        @media (min-width: 1024px) {
+            .pricing-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .pricing-card.featured {
+                grid-column: auto;
+            }
+
+            .carousel-item {
+                width: 60%;
+                max-width: 400px;
+                height: 360px;
+                font-size: 120px;
+            }
+        }
+
+        @media (max-width: 1023px) {
+            .pricing-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .pricing-card.featured {
+                grid-column: auto;
+            }
+        }
+
+        /* ANIMATED LIQUID BACKGROUND */
+        .liquid-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            opacity: 0.6;
+        }
+
+        .liquid-shape {
+            position: absolute;
+            width: 300%;
+            height: 300%;
+            top: -50%;
+            left: -50%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><defs><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" result="noise" seed="2"/></filter></defs><path d="M0,300 Q300,250 600,300 T1200,300 L1200,600 L0,600 Z" fill="%238b7355" opacity="0.1" filter="url(%23noise)"/><path d="M0,350 Q300,300 600,350 T1200,350 L1200,600 L0,600 Z" fill="%23d4a574" opacity="0.08" filter="url(%23noise)"/></svg>');
+            background-size: 600px 600px;
+            animation: liquidWave 15s ease-in-out infinite;
+        }
+
+        .liquid-shape:nth-child(2) {
+            animation: liquidWave 20s ease-in-out infinite reverse;
+            opacity: 0.7;
+        }
+
+        .liquid-shape:nth-child(3) {
+            animation: liquidWave 25s ease-in-out infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes liquidWave {
+            0% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(50px, 30px);
+            }
+            50% {
+                transform: translate(100px, 0);
+            }
+            75% {
+                transform: translate(50px, -30px);
+            }
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        /* SHOP/BOUTIQUE */
+        .shop-section {
+            background: linear-gradient(to bottom, #fdfbf7 0%, #f9f5f0 100%);
+            padding: 60px 20px;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shop-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(to bottom, rgba(139, 115, 85, 0.08), transparent);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .shop-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .shop-title {
+            font-family: 'Bodoni Moda', serif;
+            font-size: clamp(24px, 6vw, 36px);
+            font-weight: 400;
+            text-align: center;
+            color: #2a2a2a;
+            margin-bottom: 45px;
+            letter-spacing: -0.3px;
+        }
+
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+        }
+
+        .shop-card {
+            background: #ffffff;
+            border: 1px solid #e8dfd0;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.35s cubic-bezier(0.23, 1, 0.320, 1);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            box-shadow: 0 4px 12px rgba(139, 115, 85, 0.08);
+        }
+
+        .shop-card:hover {
+            border-color: #d4a574;
+            box-shadow: 0 12px 30px rgba(139, 115, 85, 0.15);
+            transform: translateY(-6px);
+        }
+
+        .shop-image {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #e8dfd0 0%, #d4c5b5 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: rgba(139, 115, 85, 0.3);
+        }
+
+        .shop-content {
+            padding: 22px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .shop-name {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 18px;
+            font-weight: 400;
+            color: #2a2a2a;
+            margin-bottom: 8px;
+            letter-spacing: -0.2px;
+        }
+
+        .shop-desc {
+            font-size: 11px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 14px;
+            flex: 1;
+        }
+
+        .shop-price {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 22px;
+            font-weight: 400;
+            color: #8b7355;
+            margin-bottom: 12px;
+        }
+
+        .shop-btn {
+            width: 100%;
+            padding: 10px 16px;
+            background: #8b7355;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            transition: all 0.3s;
+        }
+
+        .shop-btn:hover {
+            background: #6b5745;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .shop-section {
+                padding: 45px 15px;
+            }
+
+            .shop-container {
+                padding: 0 15px;
+            }
+
+            .shop-title {
+                margin-bottom: 35px;
+            }
+
+            .shop-grid {
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+                gap: 18px;
+            }
+
+            .shop-image {
+                height: 150px;
+                font-size: 50px;
+            }
+
+            .shop-content {
+                padding: 16px;
+            }
+
+            .shop-name {
+                font-size: 14px;
+                margin-bottom: 6px;
+            }
+
+            .shop-desc {
+                font-size: 10px;
+                margin-bottom: 10px;
+            }
+
+            .shop-price {
+                font-size: 18px;
+                margin-bottom: 10px;
+            }
+
+            .shop-btn {
+                padding: 8px 12px;
+                font-size: 8px;
+            }
+        }
+            text-align: center;
+            max-width: 800px;
+            margin: 80px auto;
+            padding: 0 20px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 28px;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #1a1a1a;
+            transition: all 0.3s;
+        }
+
+        .social-icon {
+            width: 54px;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            background: #f8f8f8;
+            border: 1px solid #f0f0f0;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover .social-icon {
+            background: #1a1a1a;
+            color: white;
+            border-color: #1a1a1a;
+            transform: scale(1.08);
+        }
+
+        .social-label {
+            font-size: 9px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .social-link:hover .social-label {
+            opacity: 0.95;
+        }
+
+        /* CTA */
+        .cta-section {
+            margin: 80px 10px;
+            padding: 60px 20px;
+            background: #1a1a1a;
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .cta-section h2 {
+            font-family: 'Bodoni Moda', serif;
+            font-size: clamp(22px, 5vw, 32px);
+            font-weight: 400;
+            margin-bottom: 12px;
+            letter-spacing: -0.2px;
+        }
+
+        .cta-section p {
+            font-size: 11px;
+            margin-bottom: 28px;
+            font-weight: 300;
+            opacity: 0.85;
+        }
+
+        .cta-button.white {
+            background: white;
+            color: #1a1a1a;
+        }
+
+        .cta-button.white:hover {
+            background: #f5f5f5;
+        }
+
+        /* FOOTER */
+        .footer {
+            position: relative;
+            z-index: 2;
+            background: #1a1a1a;
+            color: #999;
+            padding: 0;
+            margin-top: 80px;
+            border-top: 1px solid #2a2a2a;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 45px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-info {
+            text-align: left;
+        }
+
+        .footer-business {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 16px;
+            font-weight: 400;
+            color: white;
+            margin-bottom: 8px;
+            letter-spacing: -0.2px;
+        }
+
+        .footer-location {
+            font-size: 9px;
+            line-height: 1.6;
+            opacity: 0.7;
+        }
+
+        .footer-social {
+            text-align: right;
+        }
+
+        .footer-social-label {
+            font-size: 9px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            opacity: 0.7;
+        }
+
+        .footer-social-links {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .footer-social-link {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            background: #2a2a2a;
+            border-radius: 50%;
+            text-decoration: none;
+            color: #999;
+            transition: all 0.3s;
+            border: 1px solid #333;
+        }
+
+        .footer-social-link:hover {
+            background: white;
+            color: #1a1a1a;
+            border-color: white;
+            transform: scale(1.1);
+        }
+
+        .footer-divider {
+            height: 1px;
+            background: #2a2a2a;
+            margin: 0 20px;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-copyright {
+            flex: 1;
+        }
+
+        .footer-copyright p {
+            font-size: 8px;
+            opacity: 0.6;
+            line-height: 1.5;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            justify-content: flex-end;
+        }
+
+        .footer-links a {
+            font-size: 8px;
+            color: #999;
+            text-decoration: none;
+            opacity: 0.6;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 25px;
+                padding: 35px 20px;
+            }
+
+            .footer-social {
+                text-align: left;
+            }
+
+            .footer-social-links {
+                justify-content: flex-start;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .footer-links {
+                justify-content: center;
+                gap: 15px;
+            }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 480px) {
+            header {
+                padding: 10px 15px;
+            }
+
+            .hero {
+                padding: 30px 10px;
+                margin: 20px 0;
+            }
+
+            .hero-frame {
+                flex-direction: column;
+                padding: 20px 0;
+                border-radius: 0;
+                gap: 20px;
+            }
+
+            .hero-left {
+                width: 100%;
+            }
+
+            .hero-title {
+                font-size: 20px;
+                margin-bottom: 8px;
+                text-align: center;
+            }
+
+            .hero-desc {
+                font-size: 10px;
+                text-align: center;
+            }
+
+            .hero-middle {
+                order: -1;
+            }
+
+            .hero-emoji {
+                font-size: 40px;
+            }
+
+            .hero-right {
+                width: 100%;
+            }
+
+            .cta-button {
+                width: 100%;
+            }
+
+            .section {
+                margin: 60px 8px;
+                padding: 0 15px;
+            }
+
+            .section-title {
+                margin-bottom: 35px;
+                font-size: 20px;
+            }
+
+            .carousel-wrapper {
+                height: 280px;
+            }
+
+            .carousel-item {
+                font-size: 60px;
+            }
+
+            .pricing-card {
+                padding: 28px 20px;
+            }
+
+            .pricing-grid {
+                gap: 18px;
+                grid-template-columns: 1fr;
+            }
+
+            .social-links {
+                gap: 20px;
+            }
+
+            .cta-section {
+                padding: 45px 15px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 25px;
+                padding: 35px 20px;
+            }
+
+            .footer-social {
+                text-align: left;
+            }
+
+            .footer-social-links {
+                justify-content: flex-start;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .footer-links {
+                justify-content: center;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+
+    <header>
+        <div class="header-wrapper">
+            <div class="header-left">SALON<br>© 24</div>
+            <div class="logo">PREMIUM</div>
+            <div class="header-right">
+                <a href="#carousel">Gallery</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#shop">Shop</a>
+                <a href="#social">Follow</a>
+            </div>
+            <div class="burger-menu" id="burgerMenu">
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+            </div>
+        </div>
+    </header>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-content">
+            <a href="#carousel">Gallery</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#shop">Shop</a>
+            <a href="#social">Follow</a>
+            <button class="cta-button" style="width: 100%; margin-top: 10px;">Book</button>
+        </div>
+    </div>
+
+    <main>
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-frame">
+                <div class="hero-left">
+                    <h1 class="hero-title">Salon Premium</h1>
+                    <p class="hero-desc">Beauty treatments for nails, hair, face & body</p>
+                </div>
+                <div class="hero-middle">
+                    <div class="hero-emoji">✨</div>
+                </div>
+                <div class="hero-right">
+                    <button class="cta-button">BOOK NOW</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAROUSEL -->
+        <section class="section carousel-section" id="carousel">
+            <h2 class="section-title">Gallery</h2>
+            <div class="carousel-wrapper">
+                <div class="carousel-inner" id="carouselInner">
+                    <div class="carousel-item active">💆</div>
+                    <div class="carousel-item">✨</div>
+                    <div class="carousel-item">💅</div>
+                    <div class="carousel-item">🌺</div>
+                    <div class="carousel-item">🧖</div>
+                    <div class="carousel-item">💄</div>
+                    <div class="carousel-item">🌸</div>
+                    <div class="carousel-item">💆‍♀️</div>
+                </div>
+            </div>
+            <div class="carousel-controls">
+                <button class="carousel-btn" id="prevBtn">←</button>
+                <div class="carousel-dots" id="dots"></div>
+                <button class="carousel-btn" id="nextBtn">→</button>
+            </div>
+        </section>
+
+        <!-- PRICING -->
+        <section class="pricing-section" id="pricing">
+            <h2 class="section-title">Our Plans</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <span class="pricing-label">Basic</span>
+                    <h3 class="pricing-name">Essential</h3>
+                    <p class="pricing-desc">Get started</p>
+                    <div class="pricing-price">55€</div>
+                    <p class="pricing-period">30 minutes</p>
+                    <ul class="pricing-features">
+                        <li>One service</li>
+                        <li>Professional care</li>
+                        <li>Premium products</li>
+                    </ul>
+                    <button class="pricing-button">Select</button>
+                </div>
+
+                <div class="pricing-card featured">
+                    <span class="pricing-label">Popular</span>
+                    <h3 class="pricing-name">Premium</h3>
+                    <p class="pricing-desc">Most popular</p>
+                    <div class="pricing-price">120€</div>
+                    <p class="pricing-period">90 minutes</p>
+                    <ul class="pricing-features">
+                        <li>Multiple services</li>
+                        <li>VIP treatment</li>
+                        <li>Luxury products</li>
+                        <li>Relaxation area</li>
+                        <li>10% discount</li>
+                    </ul>
+                    <button class="pricing-button">Select</button>
+                </div>
+
+                <div class="pricing-card">
+                    <span class="pricing-label">Premium</span>
+                    <h3 class="pricing-name">Signature</h3>
+                    <p class="pricing-desc">Ultimate experience</p>
+                    <div class="pricing-price">250€</div>
+                    <p class="pricing-period">120 minutes</p>
+                    <ul class="pricing-features">
+                        <li>Full body treatment</li>
+                        <li>Personal service</li>
+                        <li>Private spa access</li>
+                        <li>Refreshments</li>
+                        <li>Priority booking</li>
+                    </ul>
+                    <button class="pricing-button">Select</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SHOP/BOUTIQUE -->
+        <section class="shop-section" id="shop">
+            <div class="liquid-bg">
+                <div class="liquid-shape"></div>
+                <div class="liquid-shape"></div>
+                <div class="liquid-shape"></div>
+            </div>
+            <div class="shop-container">
+                <h2 class="shop-title">Our Boutique</h2>
+                <div class="shop-grid">
+                    <div class="shop-card">
+                        <div class="shop-image">💄</div>
+                        <div class="shop-content">
+                            <h3 class="shop-name">Luxury Serum</h3>
+                            <p class="shop-desc">Premium facial serum with natural oils</p>
+                            <div class="shop-price">45€</div>
+                            <button class="shop-btn">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="shop-card">
+                        <div class="shop-image">🧴</div>
+                        <div class="shop-content">
+                            <h3 class="shop-name">Body Cream</h3>
+                            <p class="shop-desc">Nourishing cream for soft skin</p>
+                            <div class="shop-price">38€</div>
+                            <button class="shop-btn">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="shop-card">
+                        <div class="shop-image">💅</div>
+                        <div class="shop-content">
+                            <h3 class="shop-name">Nail Polish</h3>
+                            <p class="shop-desc">Long-lasting premium polish</p>
+                            <div class="shop-price">18€</div>
+                            <button class="shop-btn">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="shop-card">
+                        <div class="shop-image">🧖</div>
+                        <div class="shop-content">
+                            <h3 class="shop-name">Mask Treatment</h3>
+                            <p class="shop-desc">Deep cleansing face mask</p>
+                            <div class="shop-price">32€</div>
+                            <button class="shop-btn">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="shop-card">
+                        <div class="shop-image">🌿</div>
+                        <div class="shop-content">
+                            <h3 class="shop-name">Hair Oil</h3>
+                            <p class="shop-desc">Natural oils for hair care</p>
+                            <div class="shop-price">28€</div>
+                            <button class="shop-btn">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="shop-card">
+                        <div class="shop-image">✨</div>
+                        <div class="shop-content">
+                            <h3 class="shop-name">Glow Set</h3>
+                            <p class="shop-desc">Complete beauty care kit</p>
+                            <div class="shop-price">85€</div>
+                            <button class="shop-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SOCIAL -->
+        <section class="social-section" id="social">
+            <h2 class="section-title">Follow Us</h2>
+            <div class="social-links">
+                <a href="#instagram" class="social-link">
+                    <div class="social-icon">📷</div>
+                    <div class="social-label">Instagram</div>
+                </a>
+                <a href="#facebook" class="social-link">
+                    <div class="social-icon">👍</div>
+                    <div class="social-label">Facebook</div>
+                </a>
+                <a href="#twitter" class="social-link">
+                    <div class="social-icon">𝕏</div>
+                    <div class="social-label">Twitter</div>
+                </a>
+                <a href="#tiktok" class="social-link">
+                    <div class="social-icon">🎵</div>
+                    <div class="social-label">TikTok</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta-section">
+            <h2>Ready to glow?</h2>
+            <p>Book your appointment today</p>
+            <button class="cta-button white">Book Now</button>
+        </section>
+    </main>
+
+    <footer id="contact" class="footer">
+        <div class="footer-content">
+            <div class="footer-info">
+                <p class="footer-business">Salon Premium</p>
+                <p class="footer-location">Dubai • +971 4 123 456 789 • contact@salon.ae</p>
+            </div>
+
+            <div class="footer-social">
+                <p class="footer-social-label">Follow us</p>
+                <div class="footer-social-links">
+                    <a href="#instagram" class="footer-social-link" title="Instagram">📷</a>
+                    <a href="#facebook" class="footer-social-link" title="Facebook">👍</a>
+                    <a href="#twitter" class="footer-social-link" title="Twitter">𝕏</a>
+                    <a href="#tiktok" class="footer-social-link" title="TikTok">🎵</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-bottom">
+            <div class="footer-copyright">
+                <p>&copy; <span id="year">2024</span> Salon Premium. All rights reserved.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#privacy">Privacy Policy</a>
+                <a href="#terms">Terms of Service</a>
+                <a href="#cookies">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // AUTO YEAR
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        const burger = document.getElementById('burgerMenu');
+        const menu = document.getElementById('mobileMenu');
+
+        burger.addEventListener('click', () => {
+            burger.classList.toggle('active');
+            menu.classList.toggle('open');
+        });
+
+        menu.querySelectorAll('a').forEach(a => {
+            a.addEventListener('click', () => {
+                burger.classList.remove('active');
+                menu.classList.remove('open');
+            });
+        });
+
+        // CAROUSEL
+        const items = document.querySelectorAll('.carousel-item');
+        const dotsContainer = document.getElementById('dots');
+        let current = 0;
+
+        items.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = 'dot' + (i === 0 ? ' active' : '');
+            dot.addEventListener('click', () => goTo(i));
+            dotsContainer.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.dot');
+
+        function updateCarousel() {
+            items.forEach((item, i) => {
+                item.classList.remove('active', 'prev', 'next');
+                if (i === current) item.classList.add('active');
+                else if (i === (current - 1 + items.length) % items.length) item.classList.add('prev');
+                else if (i === (current + 1) % items.length) item.classList.add('next');
+            });
+            dots.forEach((dot, i) => dot.classList.toggle('active', i === current));
+        }
+
+        function next() { current = (current + 1) % items.length; updateCarousel(); }
+        function prev() { current = (current - 1 + items.length) % items.length; updateCarousel(); }
+        function goTo(i) { current = i; updateCarousel(); }
+
+        document.getElementById('nextBtn').addEventListener('click', next);
+        document.getElementById('prevBtn').addEventListener('click', prev);
+        setInterval(next, 5000);
+
+        // PARTICLES
+        const container = document.getElementById('particles');
+        for (let i = 0; i < 25; i++) {
+            setTimeout(() => {
+                function createParticle() {
+                    const p = document.createElement('div');
+                    p.className = 'particle';
+                    p.style.left = Math.random() * 100 + '%';
+                    p.style.top = '-5px';
+                    const s = 0.5 + Math.random() * 0.8;
+                    p.style.width = s + 'px';
+                    p.style.height = s + 'px';
+                    p.style.setProperty('--sway', (-25 + Math.random() * 50) + 'px');
+                    const d = 12 + Math.random() * 18;
+                    p.style.animationDuration = d + 's, ' + (3 + Math.random() * 2) + 's';
+                    p.style.animationDelay = Math.random() * 15 + 's, ' + Math.random() * 15 + 's';
+                    container.appendChild(p);
+                    setTimeout(() => { p.remove(); createParticle(); }, d * 1000);
+                }
+                createParticle();
+            }, Math.random() * 1500);
+        }
+    </script>
+</body>
+</html>
