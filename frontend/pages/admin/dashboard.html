@@ -18,6 +18,59 @@
       display: grid;
       grid-template-columns: 260px 1fr;
       min-height: 100vh;
+      position: relative;
+    }
+
+    /* ==================== BURGER MENU (mobile) ==================== */
+    .burger-menu {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1001;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+      padding: 8px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .burger-line {
+      width: 24px;
+      height: 3px;
+      background: #1a1a1a;
+      transition: all 0.3s;
+      border-radius: 2px;
+    }
+
+    .burger-menu.active .burger-line:nth-child(1) {
+      transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .burger-menu.active .burger-line:nth-child(2) {
+      opacity: 0;
+    }
+
+    .burger-menu.active .burger-line:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    /* ==================== SIDEBAR OVERLAY ==================== */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    .sidebar-overlay.active {
+      display: block;
     }
 
     /* ==================== SIDEBAR ==================== */
@@ -26,6 +79,7 @@
       color: white;
       padding: 30px 20px;
       box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+      overflow-y: auto;
     }
 
     .sidebar-logo {
@@ -461,10 +515,140 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+    /* ==================== MOBILE RESPONSIVE ==================== */
+    @media (max-width: 768px) {
+      .burger-menu {
+        display: flex;
+      }
+
+      .admin-container {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: fixed;
+        left: -100%;
+        top: 0;
+        width: 80%;
+        max-width: 280px;
+        height: 100vh;
+        z-index: 1000;
+        transition: left 0.3s ease;
+      }
+
+      .sidebar.open {
+        left: 0;
+        box-shadow: 2px 0 20px rgba(0,0,0,0.3);
+      }
+
+      .main-content {
+        padding: 80px 15px 15px 15px;
+      }
+
+      .header {
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .logout-btn {
+        padding: 8px 16px;
+        font-size: 10px;
+      }
+
+      .panel {
+        padding: 20px 15px;
+        border-radius: 8px;
+      }
+
+      .panel-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+      }
+
+      .panel-title {
+        font-size: 22px;
+      }
+
+      .items-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      .modal-content {
+        width: 95%;
+        padding: 25px 20px;
+        margin: 10px;
+      }
+
+      table {
+        font-size: 12px;
+      }
+
+      th, td {
+        padding: 8px 6px !important;
+        font-size: 11px !important;
+      }
+
+      .btn-sm {
+        padding: 4px 8px;
+        font-size: 9px;
+      }
+
+      .item-actions {
+        flex-direction: column;
+        gap: 6px !important;
+      }
+
+      .item-actions .btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 20px;
+      }
+
+      .panel-title {
+        font-size: 18px;
+      }
+
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="admin-container">
+    <!-- BURGER MENU (mobile) -->
+    <div class="burger-menu" id="burgerMenu">
+      <div class="burger-line"></div>
+      <div class="burger-line"></div>
+      <div class="burger-line"></div>
+    </div>
+    
+    <!-- OVERLAY (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <!-- SIDEBAR -->
     <div class="sidebar">
       <div class="sidebar-logo">SALON</div>
@@ -731,6 +915,34 @@
       window.location.href = '/admin/login';
     }
 
+    // ==================== MOBILE MENU ====================
+    const burgerMenu = document.getElementById('burgerMenu');
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    if (burgerMenu) {
+      burgerMenu.addEventListener('click', () => {
+        burgerMenu.classList.toggle('active');
+        sidebar.classList.toggle('open');
+        sidebarOverlay.classList.toggle('active');
+      });
+
+      sidebarOverlay.addEventListener('click', () => {
+        burgerMenu.classList.remove('active');
+        sidebar.classList.remove('open');
+        sidebarOverlay.classList.remove('active');
+      });
+
+      // Fermer le menu quand on clique sur un lien
+      document.querySelectorAll('.sidebar-menu a').forEach(link => {
+        link.addEventListener('click', () => {
+          burgerMenu.classList.remove('active');
+          sidebar.classList.remove('open');
+          sidebarOverlay.classList.remove('active');
+        });
+      });
+    }
+
     // ==================== UTILITIES ====================
     function showAlert(message, type = 'success') {
       const alert = document.getElementById('globalAlert');
@@ -828,7 +1040,7 @@
     function setupImagePreview(fileInputId, previewId, urlInputId) {
       const fileInput = document.getElementById(fileInputId);
       const preview = document.getElementById(previewId);
-      const urlInput = document.getElementById(urlInputId);
+      const urlInput = urlInputId ? document.getElementById(urlInputId) : null;
 
       fileInput.addEventListener('change', async () => {
         const file = fileInput.files[0];
@@ -842,7 +1054,7 @@
 
           // Upload immédiatement
           const url = await uploadImage(fileInput);
-          if (url) {
+          if (url && urlInput) {
             urlInput.value = url;
           }
         }
@@ -871,7 +1083,7 @@
             <div class="item-price">${p.price} €</div>
             <div>Stock: ${p.stock}</div>
             <div class="item-actions" style="margin-top: 12px;">
-              <button class="btn btn-sm btn-secondary" onclick='editProduit(${JSON.stringify(p)})'>Modifier</button>
+              <button class="btn btn-sm btn-secondary" onclick='editProduit(${JSON.stringify(p).replace(/'/g, "&#39;")})'>Modifier</button>
               <button class="btn btn-sm btn-danger" onclick="deleteProduit(${p.id})">Supprimer</button>
             </div>
           </div>
@@ -952,7 +1164,7 @@
             <div class="item-price">${p.price} €</div>
             <div>Durée: ${p.duration_minutes} min</div>
             <div class="item-actions" style="margin-top: 12px;">
-              <button class="btn btn-sm btn-secondary" onclick='editPrestation(${JSON.stringify(p)})'>Modifier</button>
+              <button class="btn btn-sm btn-secondary" onclick='editPrestation(${JSON.stringify(p).replace(/'/g, "&#39;")})'>Modifier</button>
               <button class="btn btn-sm btn-danger" onclick="deletePrestation(${p.id})">Supprimer</button>
             </div>
           </div>
@@ -1016,9 +1228,8 @@
       loadPrestations();
     });
 
-    // ==================== GALERIE (simplified - you'll need to create a gallery table) ====================
+    // ==================== GALERIE ====================
     async function loadGalerie() {
-      // TODO: Implement gallery loading from database
       const grid = document.getElementById('galerieGrid');
       grid.innerHTML = '<div class="loading">Fonctionnalité galerie à venir...</div>';
     }
