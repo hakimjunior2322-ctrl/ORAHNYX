@@ -1,0 +1,608 @@
+<!-- frontend/pages/admin/dashboard.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Salon Premium</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: #f5f5f5;
+    }
+
+    .admin-container {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      background: #1a1a1a;
+      color: white;
+      padding: 30px 20px;
+    }
+
+    .sidebar-logo {
+      font-family: 'Bodoni Moda', serif;
+      font-size: 24px;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #333;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+    }
+
+    .sidebar-menu li {
+      margin-bottom: 16px;
+    }
+
+    .sidebar-menu a {
+      color: #999;
+      text-decoration: none;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      transition: color 0.3s;
+      display: block;
+      padding: 8px 12px;
+      border-radius: 4px;
+    }
+
+    .sidebar-menu a:hover,
+    .sidebar-menu a.active {
+      color: white;
+      background: #8b7355;
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    h1 {
+      font-family: 'Bodoni Moda', serif;
+      font-size: 32px;
+      color: #1a1a1a;
+    }
+
+    .logout-btn {
+      padding: 8px 16px;
+      background: #8b7355;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* PANELS */
+    .panel {
+      background: white;
+      border-radius: 8px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .panel-title {
+      font-family: 'Bodoni Moda', serif;
+      font-size: 24px;
+      margin-bottom: 24px;
+      color: #1a1a1a;
+    }
+
+    /* TABLES */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th {
+      background: #f5f5f5;
+      padding: 12px;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid #e0e0e0;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #e0e0e0;
+      font-size: 13px;
+    }
+
+    tr:hover {
+      background: #fafafa;
+    }
+
+    /* FORMS */
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      font-family: 'Lato', sans-serif;
+      font-size: 13px;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #8b7355;
+      box-shadow: 0 0 0 3px rgba(139, 115, 85, 0.1);
+    }
+
+    /* BUTTONS */
+    .btn {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: #8b7355;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #6b5745;
+    }
+
+    .btn-danger {
+      background: #c44;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #a33;
+    }
+
+    .btn-secondary {
+      background: #e0e0e0;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background: #d0d0d0;
+    }
+
+    /* MODALES */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 8px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 30px;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .alert {
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+
+    .alert-success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .alert-error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    @media (max-width: 768px) {
+      .admin-container {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-logo">ADMIN</div>
+      <ul class="sidebar-menu">
+        <li><a href="#" onclick="showPanel('config')" class="menu-link active">Configuration</a></li>
+        <li><a href="#" onclick="showPanel('prestations')" class="menu-link">Prestations</a></li>
+        <li><a href="#" onclick="showPanel('produits')" class="menu-link">Produits</a></li>
+        <li><a href="#" onclick="showPanel('calendar')" class="menu-link">Calendrier</a></li>
+        <li><a href="#" onclick="showPanel('reservations')" class="menu-link">Réservations</a></li>
+        <li><a href="#" onclick="showPanel('km')" class="menu-link">Kilométrage</a></li>
+        <li><a href="#" onclick="showPanel('reviews')" class="menu-link">Avis</a></li>
+        <li style="margin-top: 30px; padding-top: 30px; border-top: 1px solid #333;">
+          <a href="#" onclick="logout()" style="color: #c44;">Déconnexion</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <div class="header">
+        <h1 id="panelTitle">Configuration</h1>
+        <button class="logout-btn" onclick="logout()">Déconnexion</button>
+      </div>
+
+      <!-- CONFIG PANEL -->
+      <div id="config-panel" class="panel">
+        <div class="panel-title">Configuration du Salon</div>
+        <form id="configForm">
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Nom du salon</label>
+              <input type="text" id="salonName" placeholder="Salon Premium">
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="salonEmail" placeholder="contact@salon.com">
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Téléphone</label>
+              <input type="tel" id="salonPhone">
+            </div>
+            <div class="form-group">
+              <label>Adresse</label>
+              <input type="text" id="salonAddress">
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Couleur primaire</label>
+              <input type="color" id="primaryColor" value="#8b7355">
+            </div>
+            <div class="form-group">
+              <label>Couleur secondaire</label>
+              <input type="color" id="secondaryColor" value="#d4a574">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">SAUVEGARDER</button>
+        </form>
+      </div>
+
+      <!-- PRESTATIONS PANEL -->
+      <div id="prestations-panel" class="panel" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+          <div class="panel-title" style="margin: 0;">Prestations</div>
+          <button class="btn btn-primary" onclick="openModal('prestationModal')">+ AJOUTER</button>
+        </div>
+        <table id="prestationsTable">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Prix</th>
+              <th>Durée</th>
+              <th>Catégorie</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- PRODUITS PANEL -->
+      <div id="produits-panel" class="panel" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+          <div class="panel-title" style="margin: 0;">Produits</div>
+          <button class="btn btn-primary" onclick="openModal('produitModal')">+ AJOUTER</button>
+        </div>
+        <table id="produitsTable">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Prix</th>
+              <th>Catégorie</th>
+              <th>Stock</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- KM PRICING PANEL -->
+      <div id="km-panel" class="panel" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+          <div class="panel-title" style="margin: 0;">Tarifs Kilométriques</div>
+          <button class="btn btn-primary" onclick="openModal('kmModal')">+ AJOUTER</button>
+        </div>
+        <table id="kmTable">
+          <thead>
+            <tr>
+              <th>Min (km)</th>
+              <th>Max (km)</th>
+              <th>Prix/km</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- RÉSERVATIONS PANEL -->
+      <div id="reservations-panel" class="panel" style="display: none;">
+        <div class="panel-title">Réservations</div>
+        <table id="reservationsTable">
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Prestation</th>
+              <th>Date</th>
+              <th>Prix</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- AUTRES PANELS (À compléter) -->
+      <div id="calendar-panel" class="panel" style="display: none;">
+        <div class="panel-title">Calendrier & Disponibilités</div>
+        <p>Interface de gestion du calendrier - Bloquer dates/heures</p>
+      </div>
+
+      <div id="reviews-panel" class="panel" style="display: none;">
+        <div class="panel-title">Avis Clients</div>
+        <p>Modération des avis clients</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALES -->
+  <!-- Prestation Modal -->
+  <div class="modal" id="prestationModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('prestationModal')">&times;</button>
+      <h2 style="margin-bottom: 20px;">Ajouter/Éditer Prestation</h2>
+      <form onsubmit="savePres tation(event)">
+        <div class="form-group">
+          <label>Nom *</label>
+          <input type="text" id="prestationName" required>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="prestationDesc" rows="3"></textarea>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Prix *</label>
+            <input type="number" id="prestationPrice" step="0.01" required>
+          </div>
+          <div class="form-group">
+            <label>Durée (minutes) *</label>
+            <input type="number" id="prestationDuration" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Catégorie</label>
+          <select id="prestationCategory">
+            <option value="visage">Visage</option>
+            <option value="cheveux">Cheveux</option>
+            <option value="ongles">Ongles</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">SAUVEGARDER</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Produit Modal -->
+  <div class="modal" id="produitModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('produitModal')">&times;</button>
+      <h2 style="margin-bottom: 20px;">Ajouter/Éditer Produit</h2>
+      <form onsubmit="saveProduit(event)">
+        <div class="form-group">
+          <label>Nom *</label>
+          <input type="text" id="produitName" required>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="produitDesc" rows="3"></textarea>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Prix *</label>
+            <input type="number" id="produitPrice" step="0.01" required>
+          </div>
+          <div class="form-group">
+            <label>Stock</label>
+            <input type="number" id="produitStock" value="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Catégorie</label>
+          <select id="produitCategory">
+            <option value="serums">Sérums & Crèmes</option>
+            <option value="cheveux">Cheveux</option>
+            <option value="ongles">Ongles</option>
+            <option value="kits">Kits</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">SAUVEGARDER</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- KM Modal -->
+  <div class="modal" id="kmModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('kmModal')">&times;</button>
+      <h2 style="margin-bottom: 20px;">Tarif Kilométrique</h2>
+      <form onsubmit="saveKmTier(event)">
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Min KM *</label>
+            <input type="number" id="kmMin" step="0.1" required>
+          </div>
+          <div class="form-group">
+            <label>Max KM *</label>
+            <input type="number" id="kmMax" step="0.1" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Prix/KM *</label>
+          <input type="number" id="kmPrice" step="0.01" required>
+        </div>
+        <button type="submit" class="btn btn-primary">SAUVEGARDER</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = '/api';
+    const token = localStorage.getItem('admin_token');
+
+    if (!token) {
+      window.location.href = '/admin/login';
+    }
+
+    function showPanel(panelName) {
+      document.querySelectorAll('[id$="-panel"]').forEach(p => p.style.display = 'none');
+      document.getElementById(panelName + '-panel').style.display = 'block';
+      
+      document.querySelectorAll('.menu-link').forEach(link => link.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      document.getElementById('panelTitle').textContent = 
+        panelName.charAt(0).toUpperCase() + panelName.slice(1);
+    }
+
+    function openModal(modalId) {
+      document.getElementById(modalId).classList.add('active');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('active');
+    }
+
+    function logout() {
+      localStorage.removeItem('admin_token');
+      window.location.href = '/admin/login';
+    }
+
+    document.getElementById('configForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        const response = await fetch(`${API_URL}/admin/config`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            name: document.getElementById('salonName').value,
+            email: document.getElementById('salonEmail').value,
+            phone: document.getElementById('salonPhone').value,
+            address: document.getElementById('salonAddress').value,
+            primary_color: document.getElementById('primaryColor').value,
+            secondary_color: document.getElementById('secondaryColor').value
+          })
+        });
+
+        if (response.ok) {
+          alert('Configuration sauvegardée!');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Erreur');
+      }
+    });
+  </script>
+</body>
+</html>
