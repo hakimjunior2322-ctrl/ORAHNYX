@@ -211,7 +211,7 @@ const loading = document.getElementById('loading');
 const loginBtn = document.getElementById('loginBtn');
 
 if (localStorage.getItem('admin_token')) {
-  window.location.href = '/admin/dashboard';
+  window.location.href = '/admin/dashboard.html';
 }
 
 loginForm.addEventListener('submit', async (e) => {
@@ -238,7 +238,7 @@ loginForm.addEventListener('submit', async (e) => {
     if (response.ok) {
       localStorage.setItem('admin_token', data.token);
       localStorage.setItem('admin_email', email);
-      window.location.href = '/admin/dashboard';
+      window.location.href = '/admin/dashboard.html';
     } else {
       throw new Error(data.error || 'Erreur de connexion');
     }

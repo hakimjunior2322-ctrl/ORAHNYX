@@ -1,3 +1,4 @@
+cat > frontend/public/index.html << 'EOF'
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6,676 +7,203 @@
     <title>Salon Premium</title>
     <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700&family=Lato:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            overflow-x: hidden;
-        }
-
-        body {
-            font-family: 'Lato', sans-serif;
-            background: #ffffff;
-            color: #1a1a1a;
-            overflow-x: hidden;
-        }
-
-        /* HEADER */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            padding: 12px 15px;
-            border-bottom: 1px solid #f0f0f0;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .header-wrapper {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 10px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .header-left {
-            font-size: 7px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            line-height: 1.2;
-            opacity: 0.7;
-            flex: 0 0 auto;
-            min-width: 40px;
-        }
-
-        .logo {
-            position: relative;
-            flex: 1;
-            text-align: center;
-            font-family: 'Bodoni Moda', serif;
-            font-size: 9px;
-            font-weight: 400;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            white-space: nowrap;
-        }
-
-        .header-right {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            font-size: 7px;
-            font-weight: 500;
-            letter-spacing: 0.3px;
-            flex: 0 0 auto;
-            justify-content: flex-end;
-        }
-
-        .header-right a {
-            color: #1a1a1a;
-            text-decoration: none;
-            transition: opacity 0.3s;
-            white-space: nowrap;
-            opacity: 0.7;
-            font-size: 8px;
-        }
-
-        .header-right a:hover {
-            opacity: 1;
-        }
-
-        @media (max-width: 768px) {
-            .header-right a {
-                display: none;
-            }
-
-            .logo {
-                font-size: 8px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            header {
-                padding: 10px 12px;
-            }
-
-            .header-wrapper {
-                padding: 0 5px;
-                gap: 10px;
-            }
-
-            .header-left {
-                font-size: 6px;
-                min-width: 35px;
-            }
-
-            .logo {
-                font-size: 7px;
-                letter-spacing: 0.5px;
-            }
-
-            .header-right {
-                gap: 10px;
-                font-size: 6px;
-            }
-
-            .header-right a {
-                display: none;
-            }
-        }
-
-        .cart-icon {
-            cursor: pointer;
-            font-size: 14px;
-            opacity: 0.7;
-            transition: opacity 0.3s;
-        }
-
-        .cart-icon:hover {
-            opacity: 1;
-        }
-
-        .cart-count {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #8b7355;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            font-weight: 700;
-        }
-
-        /* MAIN */
-        main {
-            position: relative;
-            z-index: 2;
-            margin-top: 50px;
-        }
-
-        /* HERO */
-        .hero {
-            min-height: 55vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-            background: transparent;
-            margin: 40px 0;
-        }
-
-        .hero-frame {
-            background: transparent;
-            border: none;
-            padding: 20px 0;
-            width: 100%;
-            box-shadow: none;
-            display: flex;
-            align-items: center;
-            gap: 30px;
-        }
-
-        .hero-left {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .hero-title {
-            font-family: 'Bodoni Moda', serif;
-            font-size: clamp(24px, 7vw, 36px);
-            font-weight: 400;
-            line-height: 1.2;
-            letter-spacing: -0.3px;
-            margin-bottom: 10px;
-            text-align: left;
-            color: #1a1a1a;
-        }
-
-        .hero-desc {
-            font-size: 11px;
-            color: #888;
-            line-height: 1.6;
-            letter-spacing: 0.2px;
-            text-align: left;
-        }
-
-        .hero-emoji {
-            font-size: clamp(45px, 8vw, 60px);
-            opacity: 0.7;
-        }
-
-        .cta-button {
-            padding: 12px 36px;
-            background: #1a1a1a;
-            color: white;
-            border: none;
-            border-radius: 2px;
-            cursor: pointer;
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            transition: all 0.3s;
-            display: inline-block;
-            margin-top: 12px;
-        }
-
-        .cta-button:hover {
-            background: #333;
-            transform: translateY(-1px);
-        }
-
-        /* SECTION */
-        .section {
-            margin: 80px 10px;
-            padding: 0 20px;
-        }
-
-        .section-title {
-            font-family: 'Bodoni Moda', serif;
-            font-size: clamp(22px, 5vw, 32px);
-            font-weight: 400;
-            text-align: center;
-            margin-bottom: 45px;
-            letter-spacing: -0.2px;
-            opacity: 0.95;
-        }
-
-        /* SHOP */
-        .shop-section {
-            background: linear-gradient(to bottom, #fdfbf7 0%, #f9f5f0 100%);
-            padding: 60px 20px;
-            margin: 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .shop-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .shop-title {
-            font-family: 'Bodoni Moda', serif;
-            font-size: clamp(24px, 6vw, 36px);
-            font-weight: 400;
-            text-align: center;
-            color: #2a2a2a;
-            margin-bottom: 30px;
-            letter-spacing: -0.3px;
-        }
-
-        .shop-categories {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-
-        .category-btn {
-            padding: 8px 16px;
-            border: 1px solid #d4a574;
-            background: white;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-            transition: all 0.3s;
-            color: #8b7355;
-        }
-
-        .category-btn:hover,
-        .category-btn.active {
-            background: #8b7355;
-            color: white;
-            border-color: #8b7355;
-        }
-
-        .shop-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-        }
-
-        .shop-card {
-            background: #ffffff;
-            border: 1px solid #e8dfd0;
-            border-radius: 8px;
-            overflow: hidden;
-            transition: all 0.35s cubic-bezier(0.23, 1, 0.320, 1);
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            box-shadow: 0 4px 12px rgba(139, 115, 85, 0.08);
-        }
-
-        .shop-card:hover {
-            border-color: #d4a574;
-            box-shadow: 0 12px 30px rgba(139, 115, 85, 0.15);
-            transform: translateY(-6px);
-        }
-
-        .shop-image {
-            width: 100%;
-            height: 150px;
-            background: linear-gradient(135deg, #e8dfd0 0%, #d4c5b5 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 45px;
-            color: rgba(139, 115, 85, 0.3);
-        }
-
-        .shop-content {
-            padding: 16px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .shop-name {
-            font-family: 'Bodoni Moda', serif;
-            font-size: 14px;
-            font-weight: 400;
-            color: #2a2a2a;
-            margin-bottom: 6px;
-            letter-spacing: -0.2px;
-        }
-
-        .shop-desc {
-            font-size: 10px;
-            color: #666;
-            line-height: 1.5;
-            margin-bottom: 10px;
-            flex: 1;
-        }
-
-        .shop-price {
-            font-family: 'Bodoni Moda', serif;
-            font-size: 18px;
-            font-weight: 400;
-            color: #8b7355;
-            margin-bottom: 10px;
-        }
-
-        .shop-btn {
-            width: 100%;
-            padding: 10px 16px;
-            background: #8b7355;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 9px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            transition: all 0.3s;
-        }
-
-        .shop-btn:hover {
-            background: #6b5745;
-            transform: translateY(-2px);
-        }
-
-        /* PRICING */
-        .pricing-section {
-            max-width: 1100px;
-            margin: 80px auto;
-            padding: 0 20px;
-        }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 22px;
-        }
-
-        .pricing-card {
-            background: #ffffff;
-            border: 1px solid #f0f0f0;
-            padding: 35px 28px;
-            text-align: center;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
-            border-radius: 8px;
-        }
-
-        .pricing-card:hover {
-            border-color: #ddd;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
-        }
-
-        .pricing-card.featured {
-            border: 1.5px solid #1a1a1a;
-            background: #f9f9f9;
-        }
-
-        .pricing-name {
-            font-family: 'Bodoni Moda', serif;
-            font-size: 20px;
-            font-weight: 400;
-            margin-bottom: 6px;
-            letter-spacing: -0.2px;
-        }
-
-        .pricing-price {
-            font-family: 'Bodoni Moda', serif;
-            font-size: 26px;
-            font-weight: 400;
-            color: #1a1a1a;
-            margin-bottom: 2px;
-        }
-
-        .pricing-period {
-            font-size: 8px;
-            color: #aaa;
-            margin-bottom: 18px;
-        }
-
-        .pricing-button {
-            width: 100%;
-            padding: 10px 16px;
-            background: #1a1a1a;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 8px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.3s;
-            border-radius: 2px;
-            margin-top: 20px;
-        }
-
-        .pricing-button:hover {
-            background: #333;
-        }
-
-        /* FOOTER */
-        .footer {
-            background: #1a1a1a;
-            color: #999;
-            padding: 45px 20px;
-            margin-top: 80px;
-            text-align: center;
-            font-size: 9px;
-        }
-
-        .footer p {
-            margin: 5px 0;
-        }
-
-        /* MODAL PANIER */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 200;
-            overflow-y: auto;
-        }
-
-        .modal.active {
-            display: flex;
-            align-items: flex-end;
-        }
-
-        .modal-content {
-            background: white;
-            width: 100%;
-            max-width: 500px;
-            margin: auto;
-            border-radius: 12px 12px 0 0;
-            padding: 30px 20px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            opacity: 0.6;
-            transition: opacity 0.3s;
-        }
-
-        .modal-title {
-            font-family: 'Bodoni Moda', serif;
-            font-size: 24px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #f0f0f0;
-            padding-bottom: 15px;
-        }
-
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .cart-item-name {
-            font-weight: 600;
-            font-size: 12px;
-        }
-
-        .cart-item-price {
-            font-weight: 700;
-            color: #8b7355;
-        }
-
-        .cart-item-remove {
-            background: none;
-            border: none;
-            color: #999;
-            cursor: pointer;
-            font-size: 12px;
-            margin-left: 10px;
-        }
-
-        .cart-empty {
-            text-align: center;
-            padding: 40px 20px;
-            color: #999;
-        }
-
-        .cart-summary {
-            padding: 20px 0;
-            border-top: 2px solid #1a1a1a;
-            margin-top: 20px;
-        }
-
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 12px;
-        }
-
-        .summary-row.total {
-            font-size: 16px;
-            font-weight: 700;
-            color: #1a1a1a;
-            border-top: 1px solid #f0f0f0;
-            padding-top: 10px;
-            margin-top: 10px;
-        }
-
-        .checkout-btn {
-            width: 100%;
-            padding: 12px;
-            background: #8b7355;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-weight: 700;
-            text-transform: uppercase;
-            cursor: pointer;
-            font-size: 10px;
-            margin-top: 20px;
-            transition: all 0.3s;
-        }
-
-        .checkout-btn:hover {
-            background: #6b5745;
-        }
-
-        @media (max-width: 768px) {
-            .pricing-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .shop-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 16px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero-frame {
-                flex-direction: column;
-            }
-
-            .shop-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
+        body { font-family: 'Lato', sans-serif; background: #ffffff; color: #1a1a1a; overflow-x: hidden; }
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; }
+        .particle { position: absolute; width: 1px; height: 1px; background: rgba(26, 26, 26, 0.08); border-radius: 50%; animation: fall linear 1 forwards, sway 4s ease-in-out infinite; }
+        @keyframes fall { to { transform: translateY(100vh); } }
+        @keyframes sway { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(var(--sway)); } }
+        header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); padding: 12px 20px; border-bottom: 1px solid #f0f0f0; width: 100vw; }
+        .header-wrapper { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 10px; }
+        .header-left { font-size: 7px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; line-height: 1.2; opacity: 0.7; }
+        .logo { position: absolute; left: 50%; transform: translateX(-50%); font-family: 'Bodoni Moda', serif; font-size: 10px; font-weight: 400; letter-spacing: 1.2px; text-transform: uppercase; }
+        .header-right { display: flex; gap: 20px; align-items: center; font-size: 8px; font-weight: 500; letter-spacing: 0.4px; }
+        .header-right a { color: #1a1a1a; text-decoration: none; transition: opacity 0.3s; white-space: nowrap; opacity: 0.7; }
+        .header-right a:hover { opacity: 1; }
+        .cart-icon { cursor: pointer; font-size: 14px; opacity: 0.7; transition: opacity 0.3s; }
+        .cart-icon:hover { opacity: 1; }
+        .cart-count { position: absolute; top: -8px; right: -8px; background: #8b7355; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+        .burger-menu { display: none; flex-direction: column; cursor: pointer; gap: 3px; z-index: 101; }
+        .burger-line { width: 18px; height: 1.5px; background: #1a1a1a; transition: all 0.3s ease; }
+        .burger-menu.active .burger-line:nth-child(1) { transform: rotate(45deg) translateY(8px); }
+        .burger-menu.active .burger-line:nth-child(2) { opacity: 0; }
+        .burger-menu.active .burger-line:nth-child(3) { transform: rotate(-45deg) translateY(-8px); }
+        .mobile-menu { position: fixed; top: 50px; left: -100%; width: 100%; height: calc(100vh - 50px); background: #ffffff; z-index: 99; transition: left 0.3s ease; overflow-y: auto; }
+        .mobile-menu.open { left: 0; }
+        .mobile-menu-content { padding: 20px 15px; display: flex; flex-direction: column; gap: 12px; }
+        .mobile-menu a { font-size: 11px; color: #1a1a1a; text-decoration: none; font-weight: 500; opacity: 0.8; }
+        @media (max-width: 768px) { .burger-menu { display: flex; } .header-right { display: none; } }
+        main { position: relative; z-index: 2; margin-top: 50px; }
+        .hero { min-height: 55vh; display: flex; align-items: center; justify-content: center; padding: 40px 20px; margin: 40px 0; }
+        .hero-frame { padding: 20px 0; width: 100%; display: flex; align-items: center; gap: 30px; }
+        .hero-left { flex: 1; }
+        .hero-title { font-family: 'Bodoni Moda', serif; font-size: clamp(24px, 7vw, 36px); font-weight: 400; line-height: 1.2; margin-bottom: 10px; }
+        .hero-desc { font-size: 11px; color: #888; line-height: 1.6; }
+        .hero-emoji { font-size: clamp(45px, 8vw, 60px); opacity: 0.7; }
+        .cta-button { padding: 12px 36px; background: #1a1a1a; color: white; border: none; border-radius: 2px; cursor: pointer; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; transition: all 0.3s; margin-top: 12px; }
+        .cta-button:hover { background: #333; transform: translateY(-1px); }
+        .section { margin: 80px 10px; padding: 0 20px; }
+        .section-title { font-family: 'Bodoni Moda', serif; font-size: clamp(22px, 5vw, 32px); font-weight: 400; text-align: center; margin-bottom: 45px; }
+        .carousel-wrapper { position: relative; height: 320px; display: flex; align-items: center; justify-content: center; max-width: 900px; margin: 0 auto; overflow: hidden; }
+        .carousel-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; perspective: 1000px; }
+        .carousel-item { position: absolute; width: 75%; max-width: 260px; height: 260px; background: #f8f8f8; border: 1px solid #f0f0f0; display: flex; align-items: center; justify-content: center; transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.8s; left: 50%; top: 50%; transform: translateX(-50%) translateY(-50%); opacity: 0; z-index: 0; visibility: hidden; overflow: hidden; border-radius: 12px; }
+        .carousel-placeholder { font-size: 70px; }
+        .carousel-item img { width: 100%; height: 100%; object-fit: cover; }
+        .carousel-item.active { opacity: 1; z-index: 10; visibility: visible; transform: translateX(-50%) translateY(-50%) translateZ(80px) scale(1.08); }
+        .carousel-item.prev { opacity: 0.5; z-index: 5; visibility: visible; transform: translateX(-50%) translateY(-50%) rotateY(40deg); }
+        .carousel-item.next { opacity: 0.5; z-index: 5; visibility: visible; transform: translateX(-50%) translateY(-50%) rotateY(-40deg); }
+        .carousel-controls { display: flex; justify-content: center; gap: 18px; margin-top: 35px; }
+        .carousel-btn { width: 36px; height: 36px; background: #f8f8f8; border: 1px solid #f0f0f0; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+        .carousel-btn:hover { background: #1a1a1a; color: white; }
+        .carousel-dots { display: flex; gap: 6px; }
+        .dot { width: 6px; height: 6px; background: #d0d0d0; border-radius: 50%; cursor: pointer; transition: all 0.3s; }
+        .dot.active { background: #1a1a1a; width: 20px; border-radius: 3px; }
+        .pricing-section { max-width: 1100px; margin: 80px auto; padding: 0 20px; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+        .pricing-card { background: #ffffff; border: 1px solid #f0f0f0; padding: 35px 28px; text-align: center; transition: all 0.4s; border-radius: 8px; }
+        .pricing-card:hover { box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08); }
+        .pricing-card.featured { border: 1.5px solid #1a1a1a; background: #f9f9f9; }
+        .pricing-label { display: inline-block; padding: 4px 11px; background: #f0f0f0; font-size: 7px; font-weight: 700; text-transform: uppercase; margin-bottom: 14px; border-radius: 3px; }
+        .pricing-card.featured .pricing-label { background: #1a1a1a; color: white; }
+        .pricing-name { font-family: 'Bodoni Moda', serif; font-size: 20px; margin-bottom: 6px; }
+        .pricing-desc { font-size: 10px; color: #999; margin-bottom: 16px; }
+        .pricing-price { font-family: 'Bodoni Moda', serif; font-size: 26px; margin-bottom: 2px; }
+        .pricing-period { font-size: 8px; color: #aaa; margin-bottom: 18px; }
+        .pricing-features { list-style: none; margin-bottom: 22px; text-align: left; }
+        .pricing-features li { padding: 7px 0; border-bottom: 1px solid #f5f5f5; font-size: 9px; color: #777; display: flex; gap: 8px; }
+        .pricing-features li::before { content: '✓'; color: #1a1a1a; font-weight: 700; }
+        .pricing-button { width: 100%; padding: 10px 16px; background: #1a1a1a; color: white; border: none; cursor: pointer; font-size: 8px; font-weight: 700; text-transform: uppercase; transition: all 0.3s; border-radius: 2px; }
+        .pricing-button:hover { background: #333; }
+        .shop-section { background: linear-gradient(to bottom, #fdfbf7 0%, #f9f5f0 100%); padding: 60px 20px; position: relative; }
+        .shop-section::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 150px; background: linear-gradient(to bottom, rgba(139, 115, 85, 0.08), transparent); }
+        .shop-container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; }
+        .shop-title { font-family: 'Bodoni Moda', serif; font-size: clamp(24px, 6vw, 36px); text-align: center; color: #2a2a2a; margin-bottom: 30px; }
+        .shop-categories { display: flex; justify-content: center; gap: 12px; margin-bottom: 40px; flex-wrap: wrap; }
+        .category-btn { padding: 8px 16px; border: 1px solid #d4a574; background: white; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 10px; text-transform: uppercase; transition: all 0.3s; color: #8b7355; }
+        .category-btn:hover, .category-btn.active { background: #8b7355; color: white; }
+        .shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+        .shop-card { background: #ffffff; border: 1px solid #e8dfd0; border-radius: 8px; overflow: hidden; transition: all 0.35s; display: flex; flex-direction: column; box-shadow: 0 4px 12px rgba(139, 115, 85, 0.08); }
+        .shop-card:hover { box-shadow: 0 12px 30px rgba(139, 115, 85, 0.15); transform: translateY(-6px); }
+        .shop-image { width: 100%; height: 150px; background: linear-gradient(135deg, #e8dfd0 0%, #d4c5b5 100%); display: flex; align-items: center; justify-content: center; font-size: 45px; color: rgba(139, 115, 85, 0.3); overflow: hidden; }
+        .shop-image img { width: 100%; height: 100%; object-fit: cover; }
+        .shop-content { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+        .shop-name { font-family: 'Bodoni Moda', serif; font-size: 14px; margin-bottom: 6px; }
+        .shop-desc { font-size: 10px; color: #666; line-height: 1.5; margin-bottom: 10px; flex: 1; }
+        .shop-price { font-family: 'Bodoni Moda', serif; font-size: 18px; color: #8b7355; margin-bottom: 10px; }
+        .shop-btn { width: 100%; padding: 10px 16px; background: #8b7355; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 9px; font-weight: 700; text-transform: uppercase; transition: all 0.3s; }
+        .shop-btn:hover { background: #6b5745; transform: translateY(-2px); }
+        .social-section { text-align: center; max-width: 800px; margin: 80px auto; padding: 0 20px; }
+        .social-links { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+        .social-link { display: flex; align-items: center; gap: 6px; text-decoration: none; color: #1a1a1a; transition: all 0.3s; }
+        .social-icon { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 16px; background: #f8f8f8; border: 1px solid #f0f0f0; border-radius: 50%; transition: all 0.3s; }
+        .social-link:hover .social-icon { background: #1a1a1a; color: white; transform: scale(1.08); }
+        .social-label { font-size: 8px; font-weight: 600; text-transform: uppercase; opacity: 0.6; }
+        .cta-section { margin: 80px 10px; padding: 60px 20px; background: #1a1a1a; color: white; text-align: center; border-radius: 8px; }
+        .cta-section h2 { font-family: 'Bodoni Moda', serif; font-size: clamp(22px, 5vw, 32px); margin-bottom: 12px; }
+        .cta-section p { font-size: 11px; margin-bottom: 28px; opacity: 0.85; }
+        .cta-button.white { background: white; color: #1a1a1a; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 200; }
+        .modal.active { display: flex; align-items: flex-end; }
+        .modal-content { background: white; width: 100%; max-width: 500px; margin: auto; border-radius: 12px 12px 0 0; padding: 30px 20px; max-height: 90vh; overflow-y: auto; }
+        .modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; opacity: 0.6; }
+        .modal-title { font-family: 'Bodoni Moda', serif; font-size: 24px; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 15px; }
+        .cart-item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #f0f0f0; }
+        .cart-item-name { font-weight: 600; font-size: 12px; }
+        .cart-item-price { font-weight: 700; color: #8b7355; }
+        .cart-item-remove { background: none; border: none; color: #999; cursor: pointer; }
+        .cart-empty { text-align: center; padding: 40px 20px; color: #999; }
+        .cart-summary { padding: 20px 0; border-top: 2px solid #1a1a1a; margin-top: 20px; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 12px; }
+        .summary-row.total { font-size: 16px; font-weight: 700; border-top: 1px solid #f0f0f0; padding-top: 10px; margin-top: 10px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 10px; font-weight: 600; text-transform: uppercase; margin-bottom: 5px; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 4px; font-size: 12px; }
+        .checkout-btn { width: 100%; padding: 12px; background: #8b7355; color: white; border: none; border-radius: 4px; font-weight: 700; text-transform: uppercase; cursor: pointer; font-size: 10px; margin-top: 20px; transition: all 0.3s; }
+        .checkout-btn:hover { background: #6b5745; }
+        .footer { background: #1a1a1a; color: #999; margin-top: 80px; }
+        .footer-content { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 45px 20px; max-width: 1200px; margin: 0 auto; }
+        .footer-business { font-family: 'Bodoni Moda', serif; font-size: 16px; color: white; margin-bottom: 8px; }
+        .footer-location { font-size: 9px; opacity: 0.7; }
+        .footer-divider { height: 1px; background: #2a2a2a; margin: 0 20px; }
+        .footer-bottom { display: flex; justify-content: space-between; padding: 25px 20px; max-width: 1200px; margin: 0 auto; }
+        .footer-copyright p { font-size: 8px; opacity: 0.6; }
+        .footer-links { display: flex; gap: 20px; }
+        .footer-links a { font-size: 8px; color: #999; text-decoration: none; text-transform: uppercase; }
+        @media (max-width: 768px) { .pricing-grid, .shop-grid { grid-template-columns: 1fr; } .footer-content { grid-template-columns: 1fr; } }
+        @media (max-width: 480px) { .hero-frame { flex-direction: column; } }
     </style>
 </head>
 <body>
+    <div class="particles" id="particles"></div>
     <header>
         <div class="header-wrapper">
             <div class="header-left">SALON<br>© 24</div>
             <div class="logo">PREMIUM</div>
             <div class="header-right">
-                <a href="#shop">Boutique</a>
+                <a href="#carousel">Galerie</a>
                 <a href="#pricing">Tarifs</a>
-                <a href="/reservation/">Réserver</a>
+                <a href="#shop">Boutique</a>
+                <a href="reservation/">Réserver</a>
+                <a href="#social">Suivez-nous</a>
                 <div style="position: relative; cursor: pointer;" onclick="toggleCart()">
                     <span class="cart-icon">🛍️</span>
                     <div class="cart-count" id="cartCount" style="display: none;">0</div>
                 </div>
             </div>
+            <div class="burger-menu" id="burgerMenu">
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+                <div class="burger-line"></div>
+            </div>
         </div>
     </header>
-
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-content">
+            <a href="#carousel">Galerie</a>
+            <a href="#pricing">Tarifs</a>
+            <a href="#shop">Boutique</a>
+            <a href="reservation/">Réserver</a>
+            <a href="#social">Suivez-nous</a>
+            <button class="cta-button" style="width: 100%; margin-top: 10px;" onclick="toggleCart()">Mon Panier</button>
+        </div>
+    </div>
     <main>
-        <!-- HERO -->
         <section class="hero">
             <div class="hero-frame">
                 <div class="hero-left">
                     <h1 class="hero-title">Salon Premium</h1>
                     <p class="hero-desc">Soins beauté pour les ongles, cheveux, visage & corps</p>
                 </div>
-                <div style="flex: 0 0 auto;">
-                    <div class="hero-emoji">✨</div>
-                </div>
-                <div style="flex: 0 0 auto;">
-                    <button class="cta-button"onclick="window.location.href='/reservation/'"
-
->RÉSERVER</button>
+                <div class="hero-middle"><div class="hero-emoji">✨</div></div>
+                <div class="hero-right">
+                    <button class="cta-button" onclick="window.location.href='reservation/'">RÉSERVER MAINTENANT</button>
                 </div>
             </div>
         </section>
-
-        <!-- SHOP/BOUTIQUE -->
+        <section class="section carousel-section" id="carousel">
+            <h2 class="section-title">Galerie</h2>
+            <div class="carousel-wrapper">
+                <div class="carousel-inner" id="carouselInner">
+                    <div class="carousel-item active"><img src="https://i.imgur.com/3KllW7E.jpeg" alt="Service 1"></div>
+                    <div class="carousel-item"><div class="carousel-placeholder">✨</div></div>
+                    <div class="carousel-item"><div class="carousel-placeholder">💅</div></div>
+                    <div class="carousel-item"><div class="carousel-placeholder">🌺</div></div>
+                    <div class="carousel-item"><div class="carousel-placeholder">🧖</div></div>
+                    <div class="carousel-item"><div class="carousel-placeholder">💄</div></div>
+                    <div class="carousel-item"><div class="carousel-placeholder">🌸</div></div>
+                    <div class="carousel-item"><div class="carousel-placeholder">💆‍♀️</div></div>
+                </div>
+            </div>
+            <div class="carousel-controls">
+                <button class="carousel-btn" id="prevBtn">←</button>
+                <div class="carousel-dots" id="dots"></div>
+                <button class="carousel-btn" id="nextBtn">→</button>
+            </div>
+        </section>
         <section class="shop-section" id="shop">
             <div class="shop-container">
                 <h2 class="shop-title">Notre Boutique</h2>
-
                 <div class="shop-categories">
                     <button class="category-btn active" onclick="filterCategory('all', this)">Tous les produits</button>
                     <button class="category-btn" onclick="filterCategory('serums', this)">Sérums & Crèmes</button>
@@ -683,97 +211,161 @@
                     <button class="category-btn" onclick="filterCategory('ongles', this)">Ongles</button>
                     <button class="category-btn" onclick="filterCategory('kits', this)">Kits</button>
                 </div>
-
-                <div class="shop-grid" id="shopGrid"></div>
+                <div class="shop-grid" id="shopGrid">
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #999;">Chargement des produits...</div>
+                </div>
             </div>
         </section>
-
-        <!-- PRICING -->
         <section class="pricing-section" id="pricing">
             <h2 class="section-title">Nos Tarifs</h2>
-            <div class="pricing-grid" id="pricingGrid"></div>
+<div class="pricing-grid" id="pricingGrid">
+    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #999;">Chargement...</div>
+</div>
+        </section>
+        <section class="social-section" id="social">
+            <h2 class="section-title">Suivez-nous</h2>
+            <div class="social-links">
+                <a href="#instagram" class="social-link"><div class="social-icon">📷</div><div class="social-label">Instagram</div></a>
+                <a href="#facebook" class="social-link"><div class="social-icon">👍</div><div class="social-label">Facebook</div></a>
+                <a href="#twitter" class="social-link"><div class="social-icon">𝕏</div><div class="social-label">Twitter</div></a>
+                <a href="#tiktok" class="social-link"><div class="social-icon">🎵</div><div class="social-label">TikTok</div></a>
+            </div>
+        </section>
+        <section class="cta-section">
+            <h2>Prête à briller?</h2>
+            <p>Réservez votre rendez-vous dès maintenant</p>
+            <button class="cta-button white" onclick="window.location.href='reservation/'">RÉSERVER</button>
         </section>
     </main>
-
-    <!-- MODAL PANIER -->
     <div class="modal" id="cartModal">
         <div class="modal-content">
             <button class="modal-close" onclick="toggleCart()">✕</button>
             <h2 class="modal-title">Mon Panier</h2>
-            
             <div id="cartItems"></div>
-
             <div class="cart-summary" id="cartSummary" style="display: none;">
-                <div class="summary-row">
-                    <span>Total:</span>
-                    <span id="totalPrice">0€</span>
-                </div>
+                <div class="summary-row"><span>Sous-total:</span><span id="subtotal">0€</span></div>
+                <div class="summary-row"><span>Frais kilométriques:</span><span id="kmFee">0€</span></div>
+                <div class="summary-row total"><span>TOTAL:</span><span id="totalPrice">0€</span></div>
             </div>
-
-            <button class="checkout-btn" onclick="goToReservation()">Passer à la réservation</button>
+            <div id="checkoutForm" style="display: none; margin-top: 20px;">
+                <h3 style="font-size: 14px; margin-bottom: 15px;">Vos informations</h3>
+                <div class="form-group"><label>Nom complet *</label><input type="text" id="fullName" placeholder="Jean Dupont" required></div>
+                <div class="form-group"><label>Email *</label><input type="email" id="email" placeholder="jean@example.com" required></div>
+                <div class="form-group"><label>Téléphone *</label><input type="tel" id="phone" placeholder="+33 6 12 34 56 78" required></div>
+                <div class="form-group"><label>Distance (km) *</label><input type="number" id="distance" placeholder="0" min="0" step="0.1"></div>
+                <button class="checkout-btn" onclick="submitOrder()">Finaliser la commande</button>
+            </div>
         </div>
     </div>
-
     <footer class="footer">
-        <p>Salon Premium • Dubaï • +971 4 123 456 789</p>
-        <p>contact@salon.ae</p>
-    </footer>
-
-    <script>
-const API_URL = 'https://orahnyx.site:8000';
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        let allProducts = [];
-        let allPacks = [];
-
-        // Charger les données depuis l'API
-        async function loadData() {
-            try {
-                // Charger les produits
-                const productsRes = await fetch(`${API_URL}/api/products`);
-                const productsData = await productsRes.json();
-                allProducts = productsData.products || [];
-
-                // Charger les packs
-                const packsRes = await fetch(`${API_URL}/api/packs`);
-                const packsData = await packsRes.json();
-                allPacks = packsData.packs || [];
-
-                renderProducts();
-                renderPacks();
-                updateCart();
-            } catch (error) {
-                console.error('Erreur chargement données:', error);
-                alert('Erreur de connexion au serveur');
-            }
-        }
-
-        function renderProducts() {
-            const grid = document.getElementById('shopGrid');
-            grid.innerHTML = allProducts.map(product => `
-                <div class="shop-card" data-category="${product.category}">
-                    <div class="shop-image">💄</div>
-                    <div class="shop-content">
-                        <h3 class="shop-name">${product.name}</h3>
-                        <p class="shop-desc">${product.description || 'Produit premium'}</p>
-                        <div class="shop-price">${product.price}€</div>
-                        <button class="shop-btn" onclick="addToCart('${product.name}', ${product.price}, 'product')">AJOUTER</button>
+        <div class="footer-content">
+            <div class="footer-info">
+                <p class="footer-business">Salon Premium</p>
+                <p class="footer-location">Dubaï • +971 4 123 456 789 • contact@salon.ae</p>
+            </div>
+            <div class="footer-social">
+                <div style="text-align: right;">
+                    <p style="font-size: 9px; font-weight: 600; text-transform: uppercase; margin-bottom: 10px; opacity: 0.7;">Suivez-nous</p>
+                    <div style="display: flex; justify-content: flex-end; gap: 12px;">
+                        <a href="#" style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; background: #2a2a2a; border-radius: 50%; color: #999; border: 1px solid #333;">📷</a>
+                        <a href="#" style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; background: #2a2a2a; border-radius: 50%; color: #999; border: 1px solid #333;">👍</a>
+                        <a href="#" style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; background: #2a2a2a; border-radius: 50%; color: #999; border: 1px solid #333;">𝕏</a>
+                        <a href="#" style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; background: #2a2a2a; border-radius: 50%; color: #999; border: 1px solid #333;">🎵</a>
                     </div>
                 </div>
-            `).join('');
-        }
+            </div>
+        </div>
+        <div class="footer-divider"></div>
+        <div class="footer-bottom">
+            <div class="footer-copyright"><p>&copy; <span id="year">2024</span> Salon Premium. Tous droits réservés.</p></div>
+            <div class="footer-links">
+                <a href="#">Politique de confidentialité</a>
+                <a href="#">Conditions d'utilisation</a>
+                <a href="#">Cookies</a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const burger = document.getElementById('burgerMenu');
+        const menu = document.getElementById('mobileMenu');
+        burger.addEventListener('click', () => { burger.classList.toggle('active'); menu.classList.toggle('open'); });
+        menu.querySelectorAll('a').forEach(a => { a.addEventListener('click', () => { burger.classList.remove('active'); menu.classList.remove('open'); }); });
+        
+        const items = document.querySelectorAll('.carousel-item');
+        const dotsContainer = document.getElementById('dots');
+        let current = 0;
+        items.forEach((_, i) => { const dot = document.createElement('div'); dot.className = 'dot' + (i === 0 ? ' active' : ''); dot.addEventListener('click', () => goTo(i)); dotsContainer.appendChild(dot); });
+        const dots = document.querySelectorAll('.dot');
+        function updateCarousel() { items.forEach((item, i) => { item.classList.remove('active', 'prev', 'next'); if (i === current) item.classList.add('active'); else if (i === (current - 1 + items.length) % items.length) item.classList.add('prev'); else if (i === (current + 1) % items.length) item.classList.add('next'); }); dots.forEach((dot, i) => dot.classList.toggle('active', i === current)); }
+        function next() { current = (current + 1) % items.length; updateCarousel(); }
+        function prev() { current = (current - 1 + items.length) % items.length; updateCarousel(); }
+        function goTo(i) { current = i; updateCarousel(); }
+        document.getElementById('nextBtn').addEventListener('click', next);
+        document.getElementById('prevBtn').addEventListener('click', prev);
+        setInterval(next, 5000);
+        
 
-        function renderPacks() {
-            const grid = document.getElementById('pricingGrid');
-            grid.innerHTML = allPacks.map((pack, idx) => `
-                <div class="pricing-card ${idx === 1 ? 'featured' : ''}">
-                    <h3 class="pricing-name">${pack.name}</h3>
-                    <div class="pricing-price">${pack.price}€</div>
-                    <p class="pricing-period">${pack.duration_minutes || pack.duration} minutes</p>
-                    <button class="pricing-button" onclick="addToCart('${pack.name}', ${pack.price}, 'pack')">AJOUTER</button>
-                </div>
-            `).join('');
-        }
 
+function displayProducts(produits) {
+    const grid = document.getElementById('shopGrid');
+    if (!produits || produits.length === 0) {
+        grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #999;">Aucun produit disponible</div>';
+        return;
+    }
+    grid.innerHTML = produits.map(p => `
+        <div class="shop-card" data-category="${p.category || 'serums'}">
+            <div class="shop-image">
+                ${p.image_url ? `<img src="${p.image_url}" alt="${p.name}">` : '🛍️'}
+            </div>
+            <div class="shop-content">
+                <h3 class="shop-name">${p.name}</h3>
+                <p class="shop-desc">${p.description || ''}</p>
+                <div class="shop-price">${p.price}€</div>
+                <button class="shop-btn" onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price})">AJOUTER AU PANIER</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+
+async function loadProduits() {
+    try {
+        const response = await fetch('/api/produits');
+        const produits = await response.json();
+        displayProducts(produits);
+    } catch (error) {
+        console.error('Erreur:', error);
+        document.getElementById('shopGrid').innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #dc3545;">Erreur de chargement</div>';
+    }
+}
+
+async function loadPrestations() {
+    try {
+        const response = await fetch('/api/prestations');
+        const prestations = await response.json();
+        const grid = document.getElementById('pricingGrid');
+        if (!prestations || prestations.length === 0) {
+            grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #999;">Aucune prestation</div>';
+            return;
+        }
+        grid.innerHTML = prestations.map((p, i) => `
+            <div class="pricing-card ${i === 1 ? 'featured' : ''}">
+                <span class="pricing-label">${i === 1 ? 'Populaire' : i === 0 ? 'Basique' : 'Premium'}</span>
+                <h3 class="pricing-name">${p.name}</h3>
+                <p class="pricing-desc">${p.description || ''}</p>
+                <div class="pricing-price">${p.price}€</div>
+                <p class="pricing-period">${p.duration_minutes || 60} min</p>
+                <ul class="pricing-features"><li>Prestation complète</li></ul>
+                <button class="pricing-button" onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price})">AJOUTER</button>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('Erreur:', error);
+    }
+}
+        
         function filterCategory(category, btn) {
             const cards = document.querySelectorAll('.shop-card');
             cards.forEach(card => {
@@ -786,83 +378,75 @@ const API_URL = 'https://orahnyx.site:8000';
             document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
         }
-
-        function addToCart(name, price, type) {
-            cart.push({ name, price, id: Date.now(), type });
+        
+        function addToCart(name, price) {
+            cart.push({ name, price, id: Date.now() });
             localStorage.setItem('cart', JSON.stringify(cart));
             updateCart();
-            
             const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                background: #8b7355;
-                color: white;
-                padding: 16px 24px;
-                border-radius: 8px;
-                box-shadow: 0 4px 16px rgba(139, 115, 85, 0.3);
-                z-index: 1000;
-                font-size: 12px;
-                font-weight: 600;
-            `;
+            notification.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #8b7355; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 16px rgba(139, 115, 85, 0.3); z-index: 1000; font-size: 12px; font-weight: 600;';
             notification.textContent = `✓ ${name} ajouté au panier`;
             document.body.appendChild(notification);
             setTimeout(() => notification.remove(), 3000);
         }
-
+        
         function updateCart() {
             const cartCount = document.getElementById('cartCount');
             const cartItems = document.getElementById('cartItems');
+            const checkoutForm = document.getElementById('checkoutForm');
             const cartSummary = document.getElementById('cartSummary');
-
-            if (cart.length > 0) {
-                cartCount.textContent = cart.length;
-                cartCount.style.display = 'flex';
-            } else {
-                cartCount.style.display = 'none';
-            }
-
+            if (cart.length > 0) { cartCount.textContent = cart.length; cartCount.style.display = 'flex'; } else { cartCount.style.display = 'none'; }
             if (cart.length === 0) {
                 cartItems.innerHTML = '<div class="cart-empty">Votre panier est vide</div>';
+                checkoutForm.style.display = 'none';
                 cartSummary.style.display = 'none';
             } else {
-                cartItems.innerHTML = cart.map(item => `
-                    <div class="cart-item">
-                        <div>
-                            <div class="cart-item-name">${item.name}</div>
-                            <div style="font-size: 10px; color: #999;">${item.type === 'pack' ? 'Prestation' : 'Produit'}</div>
-                        </div>
-                        <div>
-                            <span class="cart-item-price">${item.price}€</span>
-                            <button class="cart-item-remove" onclick="removeFromCart(${item.id})">✕</button>
-                        </div>
-                    </div>
-                `).join('');
-
-                const total = cart.reduce((sum, item) => sum + item.price, 0);
-                document.getElementById('totalPrice').textContent = total.toFixed(2) + '€';
+                cartItems.innerHTML = cart.map(item => `<div class="cart-item"><div class="cart-item-name">${item.name}</div><div><span class="cart-item-price">${item.price}€</span><button class="cart-item-remove" onclick="removeFromCart(${item.id})">✕</button></div></div>`).join('');
+                checkoutForm.style.display = 'block';
                 cartSummary.style.display = 'block';
+                updateTotal();
             }
         }
-
-        function removeFromCart(id) {
-            cart = cart.filter(item => item.id !== id);
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCart();
+        
+        function removeFromCart(id) { cart = cart.filter(item => item.id !== id); localStorage.setItem('cart', JSON.stringify(cart)); updateCart(); }
+        function updateTotal() {
+            const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+            const distance = parseFloat(document.getElementById('distance').value) || 0;
+            const kmFee = distance * 2;
+            const total = subtotal + kmFee;
+            document.getElementById('subtotal').textContent = subtotal.toFixed(2) + '€';
+            document.getElementById('kmFee').textContent = kmFee.toFixed(2) + '€';
+            document.getElementById('totalPrice').textContent = total.toFixed(2) + '€';
         }
-
-        function toggleCart() {
-            document.getElementById('cartModal').classList.toggle('active');
+        document.getElementById('distance').addEventListener('change', updateTotal);
+        function toggleCart() { document.getElementById('cartModal').classList.toggle('active'); }
+        function submitOrder() { alert('Commande envoyée!'); }
+        
+        const container = document.getElementById('particles');
+        for (let i = 0; i < 25; i++) {
+            setTimeout(() => {
+                function createParticle() {
+                    const p = document.createElement('div');
+                    p.className = 'particle';
+                    p.style.left = Math.random() * 100 + '%';
+                    p.style.top = '-5px';
+                    const s = 0.5 + Math.random() * 0.8;
+                    p.style.width = s + 'px';
+                    p.style.height = s + 'px';
+                    p.style.setProperty('--sway', (-25 + Math.random() * 50) + 'px');
+                    const d = 12 + Math.random() * 18;
+                    p.style.animationDuration = d + 's, ' + (3 + Math.random() * 2) + 's';
+                    container.appendChild(p);
+                    setTimeout(() => { p.remove(); createParticle(); }, d * 1000);
+                }
+                createParticle();
+            }, Math.random() * 1500);
         }
-
-        function goToReservation() {
-            toggleCart();
-            window.location.href = '/reservation/';
-        }
-
-        // Charger les données au démarrage
-        loadData();
+        
+        loadProduits();
+        loadPrestations();
+        updateCart();
     </script>
 </body>
 </html>
+

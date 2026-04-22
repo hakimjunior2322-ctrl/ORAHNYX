@@ -1,61 +1,88 @@
 const express = require('express');
 const router = express.Router();
-
-const { 
-  authController, 
+const {
+  authController,
   prestationsController,
   produitsController,
   reservationsController,
-  kmPricingController,
-  reviewsController,
   configController,
-  statsController
+  galerieController,
+  pricingConfigController,
+  unavailableDatesController
 } = require('../controllers/controllers');
 
-const { authenticate, authorize, validateInput, rateLimit } = require('../middleware/middleware');
-
-// ==================== AUTH ====================
+// Auth
 router.post('/auth/login', authController.login);
 router.post('/auth/register', authController.register);
 router.post('/auth/logout', authController.logout);
 
-// ==================== STATS (DASHBOARD) ====================
-router.get('/stats/dashboard', statsController.getDashboard);
-
-// ==================== PRESTATIONS ====================
+// Prestations
 router.get('/prestations', prestationsController.getAll);
 router.get('/prestations/:id', prestationsController.getById);
 router.post('/prestations', prestationsController.create);
 router.put('/prestations/:id', prestationsController.update);
 router.delete('/prestations/:id', prestationsController.delete);
 
-// ==================== PRODUITS ====================
+// Produits
 router.get('/produits', produitsController.getAll);
 router.get('/produits/:id', produitsController.getById);
 router.post('/produits', produitsController.create);
 router.put('/produits/:id', produitsController.update);
 router.delete('/produits/:id', produitsController.delete);
 
-// ==================== RESERVATIONS ====================
+// Reservations
 router.get('/reservations', reservationsController.getAll);
 router.get('/reservations/:id', reservationsController.getById);
 router.post('/reservations', reservationsController.create);
 router.put('/reservations/:id/status', reservationsController.updateStatus);
 router.delete('/reservations/:id', reservationsController.delete);
 
-// ==================== KM PRICING ====================
-router.get('/km-pricing', kmPricingController.getAll);
-router.post('/km-pricing', kmPricingController.create);
-router.put('/km-pricing/:id', kmPricingController.update);
-router.delete('/km-pricing/:id', kmPricingController.delete);
 
-// ==================== REVIEWS ====================
-router.get('/reviews', reviewsController.getAll);
-router.put('/reviews/:id/status', reviewsController.updateStatus);
-router.delete('/reviews/:id', reviewsController.delete);
+// Pricing config
+router.get('/pricing-config', pricingConfigController.get);
+router.put('/pricing-config', pricingConfigController.update);
 
-// ==================== CONFIG ====================
+// Unavailable dates
+router.get('/unavailable-dates', unavailableDatesController.getAll);
+router.post('/unavailable-dates', unavailableDatesController.add);
+router.delete('/unavailable-dates/:id', unavailableDatesController.delete);
+
+
+// Config
 router.get('/config', configController.get);
 router.put('/config', configController.update);
+
+// Routes galerie
+router.get('/galerie', galerieController.getAll);
+router.post('/galerie', galerieController.create);
+router.delete('/galerie/:id', galerieController.delete);
+
+
+// Horaires
+router.get('/horaires', async (req, res) => {
+  try {
+    const result = await require('../db').query('SELECT * FROM opening_hours ORDER BY id');
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
+router.put('/horaires', async (req, res) => {
+  try {
+    const { horaires } = req.body;
+    const db = require('../db');
+    
+    for (let h of horaires) {
+      await db.query('UPDATE opening_hours SET hours = $1 WHERE day = $2', [h.hours, h.day]);
+    }
+    
+    res.json({ message: 'Horaires mis à jour' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
 
 module.exports = router;

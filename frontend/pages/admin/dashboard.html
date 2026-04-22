@@ -193,6 +193,43 @@
       font-weight: 700;
     }
 
+    /* ==================== CALENDAR ==================== */
+    .calendar-day {
+      padding: 15px;
+      text-align: center;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+      background: white;
+      transition: all 0.3s;
+    }
+
+    .calendar-day:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .calendar-day.unavailable {
+      background: #dc3545;
+      color: white;
+      border-color: #dc3545;
+    }
+
+    .calendar-day.today {
+      border-color: #8b7355;
+      font-weight: bold;
+    }
+
+    .unavailable-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
     /* ==================== GRIDS ==================== */
     .items-grid {
       display: grid;
@@ -657,6 +694,8 @@
         <li><a href="#" onclick="showPanel('prestations')" class="menu-link">💅 Prestations</a></li>
         <li><a href="#" onclick="showPanel('galerie')" class="menu-link">📸 Galerie</a></li>
         <li><a href="#" onclick="showPanel('reservations')" class="menu-link">📅 Réservations</a></li>
+        <li><a href="#" onclick="showPanel('kilometrage')" class="menu-link">💰 Kilométrage</a></li>
+        <li><a href="#" onclick="showPanel('calendrier')" class="menu-link">📅 Calendrier</a></li>
         <li><a href="#" onclick="showPanel('horaires')" class="menu-link">⏰ Horaires</a></li>
         <li><a href="#" onclick="showPanel('config')" class="menu-link">⚙️ Configuration</a></li>
         <li style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #444;">
@@ -722,6 +761,39 @@
           </thead>
           <tbody id="reservationsTable"></tbody>
         </table>
+      </div>
+
+      <!-- ==================== KILOMETRAGE PANEL ==================== -->
+      <div id="kilometrage-panel" class="panel">
+        <div class="panel-title">💰 Configuration Kilométrage</div>
+        <p style="color: #666; margin: 15px 0;">Définissez le prix par kilomètre pour les déplacements à domicile</p>
+        <form id="kilometrageForm" style="margin-top: 20px; max-width: 400px;">
+          <div class="form-group">
+            <label>Prix par kilomètre (€)</label>
+            <input type="number" id="pricePerKm" step="0.01" min="0" placeholder="4.00">
+          </div>
+          <button type="submit" class="btn btn-primary">💾 ENREGISTRER</button>
+          <div id="kmSuccess" class="alert alert-success" style="margin-top: 15px;">Prix enregistré avec succès !</div>
+        </form>
+      </div>
+
+      <!-- ==================== CALENDRIER PANEL ==================== -->
+      <div id="calendrier-panel" class="panel">
+        <div class="panel-title">📅 Calendrier de Disponibilité</div>
+        <p style="color: #666; margin: 15px 0;">Cliquez sur un jour pour le marquer comme indisponible (rouge = fermé)</p>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0;">
+          <button class="btn btn-secondary" onclick="changeMonth(-1)">← Précédent</button>
+          <h3 id="currentMonth" style="color: #8b7355;"></h3>
+          <button class="btn btn-secondary" onclick="changeMonth(1)">Suivant →</button>
+        </div>
+        
+        <div id="calendar" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-top: 20px;"></div>
+
+        <div style="margin-top: 30px;">
+          <h3 style="margin-bottom: 15px; color: #8b7355;">📋 Dates indisponibles</h3>
+          <div id="unavailableList"></div>
+        </div>
       </div>
 
       <!-- ==================== HORAIRES PANEL ==================== -->
@@ -912,7 +984,132 @@
     const token = localStorage.getItem('admin_token');
 
     if (!token) {
-      window.location.href = '/admin/login';
+      window.location.href = '/admin/login.html';
+    }
+
+    // ==================== CALENDAR ====================
+    let currentDate = new Date();
+    let unavailableDates = [];
+
+    async function loadPricing() {
+      try {
+        const res = await fetch('/api/pricing-config');
+        const data = await res.json();
+        document.getElementById('pricePerKm').value = data.price_per_km || 4.00;
+      } catch (error) {
+        console.error('Erreur:', error);
+      }
+    }
+
+    document.getElementById('kilometrageForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const price_per_km = parseFloat(document.getElementById('pricePerKm').value);
+      
+      try {
+        await fetch('/api/pricing-config', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ price_per_km })
+        });
+        
+        const success = document.getElementById('kmSuccess');
+        success.style.display = 'block';
+        setTimeout(() => success.style.display = 'none', 3000);
+      } catch (error) {
+        console.error('Erreur:', error);
+        showAlert('Erreur lors de la sauvegarde', 'error');
+      }
+    });
+
+    async function loadUnavailableDates() {
+      try {
+        const res = await fetch('/api/unavailable-dates');
+        unavailableDates = await res.json();
+        renderCalendar();
+        renderUnavailableList();
+      } catch (error) {
+        console.error('Erreur:', error);
+      }
+    }
+
+    function renderCalendar() {
+      const calendar = document.getElementById('calendar');
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      
+      document.getElementById('currentMonth').textContent = 
+        new Date(year, month).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+      
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      
+      let html = '';
+      const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+      dayNames.forEach(day => html += `<div style="font-weight: bold; text-align: center; padding: 10px;">${day}</div>`);
+      
+      for (let i = 0; i < (firstDay === 0 ? 6 : firstDay - 1); i++) {
+        html += '<div></div>';
+      }
+      
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(year, month, day);
+        const dateStr = date.toISOString().split('T')[0];
+        const isUnavailable = unavailableDates.some(d => d.date.split('T')[0] === dateStr);
+        const isToday = date.toDateString() === today.toDateString();
+        
+        html += `<div class="calendar-day ${isUnavailable ? 'unavailable' : ''} ${isToday ? 'today' : ''}" 
+                      onclick="toggleDate('${dateStr}')">${day}</div>`;
+      }
+      
+      calendar.innerHTML = html;
+    }
+
+    async function toggleDate(dateStr) {
+      const existing = unavailableDates.find(d => d.date.split('T')[0] === dateStr);
+      
+      try {
+        if (existing) {
+          await fetch(`/api/unavailable-dates/${existing.id}`, { method: 'DELETE' });
+        } else {
+          await fetch('/api/unavailable-dates', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ date: dateStr, reason: 'Fermé' })
+          });
+        }
+        
+        loadUnavailableDates();
+      } catch (error) {
+        console.error('Erreur:', error);
+        showAlert('Erreur lors de la modification', 'error');
+      }
+    }
+
+    function renderUnavailableList() {
+      const list = document.getElementById('unavailableList');
+      if (unavailableDates.length === 0) {
+        list.innerHTML = '<p style="color: #999; text-align: center; padding: 20px;">Aucune date indisponible</p>';
+        return;
+      }
+      
+      list.innerHTML = unavailableDates
+        .sort((a, b) => new Date(a.date) - new Date(b.date))
+        .map(d => `
+          <div class="unavailable-item">
+            <span style="font-weight: 500;">${new Date(d.date).toLocaleDateString('fr-FR', { 
+              weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+            })}</span>
+            <button class="btn btn-danger btn-sm" onclick="toggleDate('${d.date.split('T')[0]}')">🗑️ Supprimer</button>
+          </div>
+        `).join('');
+    }
+
+    function changeMonth(delta) {
+      currentDate.setMonth(currentDate.getMonth() + delta);
+      renderCalendar();
     }
 
     // ==================== MOBILE MENU ====================
@@ -933,7 +1130,6 @@
         sidebarOverlay.classList.remove('active');
       });
 
-      // Fermer le menu quand on clique sur un lien
       document.querySelectorAll('.sidebar-menu a').forEach(link => {
         link.addEventListener('click', () => {
           burgerMenu.classList.remove('active');
@@ -963,17 +1159,20 @@
         prestations: 'Prestations',
         galerie: 'Galerie',
         reservations: 'Réservations',
+        kilometrage: 'Kilométrage',
+        calendrier: 'Calendrier',
         horaires: 'Horaires',
         config: 'Configuration'
       };
       
       document.getElementById('panelTitle').textContent = titles[panelName];
       
-      // Load data
       if (panelName === 'produits') loadProduits();
       if (panelName === 'prestations') loadPrestations();
       if (panelName === 'galerie') loadGalerie();
       if (panelName === 'reservations') loadReservations();
+      if (panelName === 'kilometrage') loadPricing();
+      if (panelName === 'calendrier') loadUnavailableDates();
       if (panelName === 'config') loadConfig();
     }
 
@@ -987,7 +1186,7 @@
 
     function logout() {
       localStorage.removeItem('admin_token');
-      window.location.href = '/admin/login';
+      window.location.href = '/admin/login.html';
     }
 
     async function apiCall(endpoint, method = 'GET', data = null) {
@@ -1036,7 +1235,6 @@
       }
     }
 
-    // Preview image
     function setupImagePreview(fileInputId, previewId, urlInputId) {
       const fileInput = document.getElementById(fileInputId);
       const preview = document.getElementById(previewId);
@@ -1052,7 +1250,6 @@
           };
           reader.readAsDataURL(file);
 
-          // Upload immédiatement
           const url = await uploadImage(fileInput);
           if (url && urlInput) {
             urlInput.value = url;
@@ -1061,7 +1258,6 @@
       });
     }
 
-    // Setup all previews
     setupImagePreview('produitImageFile', 'produitImagePreview', 'produitImageUrl');
     setupImagePreview('prestationImageFile', 'prestationImagePreview', 'prestationImageUrl');
     setupImagePreview('galerieImageFile', 'galerieImagePreview', null);

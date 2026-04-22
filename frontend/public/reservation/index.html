@@ -6,996 +6,382 @@
     <title>Réservation - Salon Premium</title>
     <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700&family=Lato:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            overflow-x: hidden;
-        }
-
-        body {
-            font-family: 'Lato', sans-serif;
-            background: #ffffff;
-            color: #1a1a1a;
-            overflow-x: hidden;
-        }
-
-        /* HEADER */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            padding: 12px 15px;
-            border-bottom: 1px solid #f0f0f0;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .header-wrapper {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 10px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .header-left {
-            font-size: 7px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            line-height: 1.2;
-            opacity: 0.7;
-            flex: 0 0 auto;
-            min-width: 40px;
-        }
-
-        .logo {
-            position: relative;
-            flex: 1;
-            text-align: center;
-            font-family: 'Bodoni Moda', serif;
-            font-size: 9px;
-            font-weight: 400;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            white-space: nowrap;
-        }
-
-        .header-right {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            font-size: 7px;
-            font-weight: 500;
-            letter-spacing: 0.3px;
-            flex: 0 0 auto;
-            justify-content: flex-end;
-        }
-
-        .header-right a {
-            color: #1a1a1a;
-            text-decoration: none;
-            transition: opacity 0.3s;
-            white-space: nowrap;
-            opacity: 0.7;
-            font-size: 8px;
-        }
-
-        .header-right a:hover {
-            opacity: 1;
-        }
-
-        @media (max-width: 768px) {
-            .header-right a {
-                font-size: 7px;
-            }
-
-            .logo {
-                font-size: 8px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            header {
-                padding: 10px 12px;
-            }
-
-            .header-wrapper {
-                padding: 0 5px;
-                gap: 10px;
-            }
-
-            .header-left {
-                font-size: 6px;
-                min-width: 35px;
-            }
-
-            .logo {
-                font-size: 7px;
-                letter-spacing: 0.5px;
-            }
-
-            .header-right {
-                gap: 10px;
-                font-size: 6px;
-            }
-
-            .header-right a {
-                font-size: 7px;
-            }
-        }
-
-        /* MAIN */
-        main {
-            position: relative;
-            z-index: 2;
-            margin-top: 50px;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 40px 20px;
-        }
-
-        .page-title {
-            font-family: 'Bodoni Moda', serif;
-            font-size: clamp(28px, 6vw, 40px);
-            font-weight: 400;
-            text-align: center;
-            margin-bottom: 40px;
-            letter-spacing: -0.3px;
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        /* SECTION GAUCHE - RÉSERVATION */
-        .booking-section {
-            background: #fdfbf7;
-            padding: 30px;
-            border-radius: 12px;
-            border: 1px solid #e8dfd0;
-        }
-
-        .section-title {
-            font-family: 'Bodoni Moda', serif;
-            font-size: 20px;
-            font-weight: 400;
-            margin-bottom: 20px;
-            letter-spacing: -0.2px;
-            border-bottom: 1px solid #d4a574;
-            padding-bottom: 15px;
-        }
-
-        /* CALENDAR */
-        .calendar {
-            margin-bottom: 30px;
-        }
-
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .calendar-header button {
-            background: #8b7355;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 10px;
-            font-weight: 700;
-            transition: all 0.3s;
-        }
-
-        .calendar-header button:hover {
-            background: #6b5745;
-        }
-
-        .month-year {
-            font-family: 'Bodoni Moda', serif;
-            font-size: 16px;
-            font-weight: 400;
-        }
-
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 8px;
-        }
-
-        .day-header {
-            text-align: center;
-            font-weight: 700;
-            font-size: 10px;
-            text-transform: uppercase;
-            color: #8b7355;
-            padding: 8px;
-        }
-
-        .day {
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #e0e0e0;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-            transition: all 0.3s;
-            background: white;
-        }
-
-        .day:hover {
-            border-color: #8b7355;
-            background: #f9f5f0;
-        }
-
-        .day.selected {
-            background: #8b7355;
-            color: white;
-            border-color: #8b7355;
-            font-weight: 700;
-        }
-
-        .day.disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
-        /* HORAIRES */
-        .time-slots {
-            margin-bottom: 30px;
-        }
-
-        .time-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-
-        .time-slot {
-            padding: 12px;
-            border: 1px solid #d4a574;
-            border-radius: 4px;
-            text-align: center;
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: 600;
-            background: white;
-            transition: all 0.3s;
-            color: #8b7355;
-        }
-
-        .time-slot:hover {
-            background: #f9f5f0;
-            border-color: #8b7355;
-        }
-
-        .time-slot.selected {
-            background: #8b7355;
-            color: white;
-            border-color: #8b7355;
-        }
-
-        /* PACKS */
-        .packs-selection {
-            margin-bottom: 30px;
-        }
-
-        .pack-options {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-
-        .pack-option {
-            padding: 15px;
-            border: 2px solid #e8dfd0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: white;
-        }
-
-        .pack-option:hover {
-            border-color: #8b7355;
-            box-shadow: 0 4px 12px rgba(139, 115, 85, 0.1);
-        }
-
-        .pack-option input[type="radio"] {
-            margin-right: 10px;
-        }
-
-        .pack-name {
-            font-weight: 700;
-            font-size: 12px;
-            color: #1a1a1a;
-            margin-bottom: 5px;
-        }
-
-        .pack-details {
-            font-size: 10px;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .pack-price {
-            font-family: 'Bodoni Moda', serif;
-            font-size: 16px;
-            font-weight: 400;
-            color: #8b7355;
-        }
-
-        /* SECTION DROITE - PRODUITS OPTIONNELS */
-        .products-section {
-            background: #f9f5f0;
-            padding: 30px;
-            border-radius: 12px;
-            border: 1px solid #e8dfd0;
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            max-height: 500px;
-            overflow-y: auto;
-        }
-
-        .product-item {
-            background: white;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #e8dfd0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .product-item:hover {
-            border-color: #8b7355;
-            box-shadow: 0 4px 12px rgba(139, 115, 85, 0.1);
-        }
-
-        .product-item input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-
-        .product-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .product-name {
-            font-weight: 600;
-            font-size: 11px;
-            color: #1a1a1a;
-        }
-
-        .product-price {
-            font-family: 'Bodoni Moda', serif;
-            font-size: 12px;
-            color: #8b7355;
-            font-weight: 400;
-        }
-
-        /* RÉSUMÉ & BOUTON */
-        .summary-box {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            border: 2px solid #1a1a1a;
-            margin-top: 30px;
-        }
-
-        .summary-title {
-            font-family: 'Bodoni Moda', serif;
-            font-size: 16px;
-            font-weight: 400;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #f0f0f0;
-            padding-bottom: 10px;
-        }
-
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            margin-bottom: 10px;
-            padding: 8px 0;
-            border-bottom: 1px solid #f5f5f5;
-        }
-
-        .summary-row.total {
-            font-size: 14px;
-            font-weight: 700;
-            border-bottom: none;
-            border-top: 2px solid #1a1a1a;
-            padding-top: 15px;
-            margin-top: 15px;
-        }
-
-        .book-button {
-            width: 100%;
-            padding: 14px;
-            background: #8b7355;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            margin-top: 20px;
-            transition: all 0.3s;
-        }
-
-        .book-button:hover {
-            background: #6b5745;
-            transform: translateY(-2px);
-        }
-
-        .book-button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        /* MODAL CLIENT INFO */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 300;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            max-width: 500px;
-            width: 100%;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .modal-title {
-            font-family: 'Bodoni Moda', serif;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-            opacity: 0.8;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #e0e0e0;
-            border-radius: 4px;
-            font-size: 12px;
-            font-family: 'Lato', sans-serif;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #8b7355;
-            box-shadow: 0 0 0 2px rgba(139, 115, 85, 0.1);
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 25px;
-        }
-
-        .modal-buttons button {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 4px;
-            font-weight: 700;
-            text-transform: uppercase;
-            cursor: pointer;
-            font-size: 10px;
-            transition: all 0.3s;
-        }
-
-        .modal-buttons .confirm-btn {
-            background: #8b7355;
-            color: white;
-        }
-
-        .modal-buttons .confirm-btn:hover {
-            background: #6b5745;
-        }
-
-        .modal-buttons .cancel-btn {
-            background: #f0f0f0;
-            color: #1a1a1a;
-        }
-
-        .modal-buttons .cancel-btn:hover {
-            background: #e0e0e0;
-        }
-
-        /* FOOTER */
-        .footer {
-            background: #1a1a1a;
-            color: #999;
-            padding: 45px 20px;
-            margin-top: 80px;
-            text-align: center;
-            font-size: 9px;
-        }
-
-        .footer p {
-            margin: 5px 0;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
-            .time-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .products-grid {
-                max-height: none;
-            }
-        }
-
-        @media (max-width: 480px) {
-            main {
-                padding: 20px 15px;
-            }
-
-            .booking-section,
-            .products-section {
-                padding: 20px;
-            }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Lato', sans-serif; background: linear-gradient(to bottom, #fdfbf7, #f9f5f0); color: #2a2a2a; }
+        .header { background: white; padding: 15px 20px; border-bottom: 1px solid #e8dfd0; position: sticky; top: 0; z-index: 100; }
+        .header-content { max-width: 800px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: 'Bodoni Moda', serif; font-size: 12px; letter-spacing: 1.5px; }
+        .back-link { color: #8b7355; text-decoration: none; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .section { background: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; border: 1px solid #e8dfd0; box-shadow: 0 2px 8px rgba(139, 115, 85, 0.08); }
+        .section-title { font-family: 'Bodoni Moda', serif; font-size: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 12px; }
+        .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 15px; }
+        .calendar-header { text-align: center; font-size: 9px; font-weight: 700; color: #999; text-transform: uppercase; padding: 8px 0; }
+        .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border: 1px solid #e8dfd0; border-radius: 8px; cursor: pointer; font-size: 13px; transition: all 0.3s; background: white; }
+        .calendar-day:hover { background: #f9f5f0; border-color: #d4a574; }
+        .calendar-day.selected { background: #8b7355; color: white; border-color: #8b7355; font-weight: 700; }
+        .calendar-day.disabled { opacity: 0.3; cursor: not-allowed; }
+        .calendar-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .calendar-month { font-family: 'Bodoni Moda', serif; font-size: 16px; }
+        .calendar-btn { padding: 8px 16px; background: #8b7355; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+        .time-slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .time-slot { padding: 12px; border: 1px solid #e8dfd0; border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.3s; font-size: 13px; font-weight: 600; }
+        .time-slot:hover { background: #f9f5f0; border-color: #d4a574; }
+        .time-slot.selected { background: #8b7355; color: white; border-color: #8b7355; }
+        .location-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .location-option { padding: 16px; border: 2px solid #e8dfd0; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .location-option:hover { border-color: #d4a574; background: #f9f5f0; }
+        .location-option.selected { border-color: #8b7355; background: #8b7355; color: white; }
+        .location-icon { font-size: 28px; margin-bottom: 8px; }
+        .location-label { font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .km-input { margin-top: 15px; }
+        .km-input input { width: 100%; padding: 12px; border: 1px solid #e8dfd0; border-radius: 8px; font-size: 14px; }
+        .prestations-grid { display: grid; gap: 12px; }
+        .prestation-card { padding: 16px; border: 1px solid #e8dfd0; border-radius: 12px; cursor: pointer; transition: all 0.3s; }
+        .prestation-card:hover { border-color: #d4a574; background: #f9f5f0; }
+        .prestation-card.selected { border-color: #8b7355; border-width: 2px; background: #f9f5f0; }
+        .prestation-name { font-family: 'Bodoni Moda', serif; font-size: 16px; margin-bottom: 4px; }
+        .prestation-desc { font-size: 11px; color: #666; margin-bottom: 8px; }
+        .prestation-price { font-family: 'Bodoni Moda', serif; font-size: 18px; color: #8b7355; font-weight: 600; }
+        .products-list { display: grid; gap: 10px; }
+        .product-item { padding: 12px; border: 1px solid #e8dfd0; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.3s; }
+        .product-item:hover { background: #f9f5f0; }
+        .product-item.selected { border-color: #8b7355; background: #f9f5f0; }
+        .product-info { flex: 1; }
+        .product-name { font-weight: 600; font-size: 13px; margin-bottom: 2px; }
+        .product-price { font-size: 14px; color: #8b7355; font-weight: 600; }
+        .product-checkbox { width: 20px; height: 20px; }
+        .summary { background: #f9f5f0; padding: 20px; border-radius: 12px; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 13px; }
+        .summary-row.total { font-size: 18px; font-weight: 700; border-top: 2px solid #8b7355; padding-top: 12px; margin-top: 12px; color: #8b7355; }
+        .confirm-btn { width: 100%; padding: 16px; background: #8b7355; color: white; border: none; border-radius: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; cursor: pointer; letter-spacing: 0.8px; transition: all 0.3s; margin-top: 20px; }
+        .confirm-btn:hover { background: #6b5745; transform: translateY(-2px); }
+        .confirm-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .form-input { width: 100%; padding: 12px; border: 1px solid #e8dfd0; border-radius: 8px; font-size: 13px; margin-bottom: 12px; }
+        .hidden { display: none; }
     </style>
-
 </head>
 <body>
-    <header>
-        <div class="header-wrapper">
-            <div class="header-left">SALON<br>© 24</div>
-            <div class="logo">PREMIUM</div>
-            <div class="header-right">
-                <a href="index-final.html">← Retour au site</a>
-            </div>
-        </div>
-    </header>
-
-    <main>
-        <h1 class="page-title">Réservez votre rendez-vous</h1>
-
-        <div class="container">
-            <!-- GAUCHE: RÉSERVATION -->
-            <div class="booking-section">
-                <!-- CALENDRIER -->
-                <div class="calendar">
-                    <h3 class="section-title">📅 Sélectionnez une date</h3>
-                    
-                    <div class="calendar-header">
-                        <button onclick="previousMonth()">← Précédent</button>
-                        <div class="month-year" id="monthYear"></div>
-                        <button onclick="nextMonth()">Suivant →</button>
-                    </div>
-
-                    <div class="calendar-grid" id="calendarGrid"></div>
-                </div>
-
-                <!-- HORAIRES -->
-                <div class="time-slots">
-                    <h3 class="section-title">⏰ Sélectionnez une heure</h3>
-                    <div class="time-grid" id="timeGrid"></div>
-                </div>
-
-                <!-- PACKS -->
-                <div class="packs-selection">
-                    <h3 class="section-title">💆 Choisissez votre prestation</h3>
-                    <div class="pack-options" id="packOptions"></div>
-                </div>
-            </div>
-
-            <!-- DROITE: PRODUITS OPTIONNELS -->
-            <div class="products-section">
-                <h3 class="section-title">🛍️ Ajouter des produits (optionnel)</h3>
-                <div class="products-grid" id="productsGrid"></div>
-            </div>
-        </div>
-
-        <!-- RÉSUMÉ -->
-        <div class="summary-box">
-            <div class="summary-title">Récapitulatif de votre réservation</div>
-            
-            <div class="summary-row">
-                <span>Date:</span>
-                <span id="summaryDate">Non sélectionnée</span>
-            </div>
-
-            <div class="summary-row">
-                <span>Heure:</span>
-                <span id="summaryTime">Non sélectionnée</span>
-            </div>
-
-            <div class="summary-row">
-                <span>Prestation:</span>
-                <span id="summaryPack">Aucune</span>
-            </div>
-
-            <div id="summaryProducts"></div>
-
-            <div class="summary-row total">
-                <span>TOTAL:</span>
-                <span id="summaryTotal">0€</span>
-            </div>
-
-            <button class="book-button" onclick="submitBooking()">Confirmer la réservation</button>
-        </div>
-    </main>
-
-    <!-- MODAL INFOS CLIENT -->
-    <div class="modal" id="clientModal">
-        <div class="modal-content">
-            <h2 class="modal-title">Vos informations</h2>
-            
-            <div class="form-group">
-                <label>Nom complet *</label>
-                <input type="text" id="clientName" placeholder="Jean Dupont">
-            </div>
-
-            <div class="form-group">
-                <label>Email *</label>
-                <input type="email" id="clientEmail" placeholder="jean@example.com">
-            </div>
-
-            <div class="form-group">
-                <label>Téléphone *</label>
-                <input type="tel" id="clientPhone" placeholder="+33 6 12 34 56 78">
-            </div>
-
-            <div class="modal-buttons">
-                <button class="confirm-btn" onclick="confirmBooking()">Confirmer</button>
-                <button class="cancel-btn" onclick="closeModal()">Annuler</button>
-            </div>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">SALON<br>© 24</div>
+            <div style="font-family: 'Bodoni Moda', serif; font-size: 14px;">PREMIUM</div>
+            <a href="../" class="back-link">← Retour au site</a>
         </div>
     </div>
 
-    <footer class="footer">
-        <p>Salon Premium • Dubaï • +971 4 123 456 789</p>
-        <p>contact@salon.ae</p>
-    </footer>
+    <div class="container">
+        <div class="section">
+            <div class="section-title">📅 Sélectionnez une date</div>
+            <div class="calendar-controls">
+                <button class="calendar-btn" onclick="changeMonth(-1)">← Précédent</button>
+                <div class="calendar-month" id="currentMonth"></div>
+                <button class="calendar-btn" onclick="changeMonth(1)">Suivant →</button>
+            </div>
+            <div class="calendar">
+                <div class="calendar-header">LUN</div>
+                <div class="calendar-header">MAR</div>
+                <div class="calendar-header">MER</div>
+                <div class="calendar-header">JEU</div>
+                <div class="calendar-header">VEN</div>
+                <div class="calendar-header">SAM</div>
+                <div class="calendar-header">DIM</div>
+            </div>
+            <div class="calendar" id="calendarDays"></div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">⏰ Sélectionnez une heure</div>
+            <div class="time-slots" id="timeSlots">
+                <div class="time-slot" onclick="selectTime('09:00')">09:00</div>
+                <div class="time-slot" onclick="selectTime('10:00')">10:00</div>
+                <div class="time-slot" onclick="selectTime('11:00')">11:00</div>
+                <div class="time-slot" onclick="selectTime('14:00')">14:00</div>
+                <div class="time-slot" onclick="selectTime('15:00')">15:00</div>
+                <div class="time-slot" onclick="selectTime('16:00')">16:00</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">📍 Type de service</div>
+            <div class="location-options">
+                <div class="location-option" onclick="selectLocationType('salon')">
+                    <div class="location-icon">🏪</div>
+                    <div class="location-label">Au Salon</div>
+                </div>
+                <div class="location-option" onclick="selectLocationType('domicile')">
+                    <div class="location-icon">🏠</div>
+                    <div class="location-label">À Domicile</div>
+                </div>
+            </div>
+            <div class="km-input hidden" id="kmInput">
+                <label style="font-size: 11px; font-weight: 600; display: block; margin-bottom: 8px;">Distance (km) :</label>
+                <input type="number" placeholder="Entrez la distance en km" min="0" step="0.1" oninput="updateTotal()">
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">👑 Choisissez votre prestation</div>
+<div class="prestations-grid" id="prestationsGrid">
+    <div style="text-align: center; padding: 20px; color: #999;">Chargement...</div>
+</div>
+
+        <div class="section">
+            <div class="section-title">🛍️ Ajouter des produits (optionnel)</div>
+            <div class="products-list" id="productsList">
+                <div style="text-align: center; color: #999; padding: 20px;">Chargement des produits...</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">📋 Récapitulatif de votre réservation</div>
+            <div class="summary">
+                <div class="summary-row"><span>Date:</span><span id="summaryDate">Non sélectionnée</span></div>
+                <div class="summary-row"><span>Heure:</span><span id="summaryTime">Non sélectionnée</span></div>
+                <div class="summary-row"><span>Type:</span><span id="summaryType">-</span></div>
+                <div class="summary-row hidden" id="summaryKmRow"><span>Distance:</span><span id="summaryKm">0 km</span></div>
+                <div class="summary-row"><span>Prestation:</span><span id="summaryPrestation">Aucune</span></div>
+                <div class="summary-row"><span>Produits:</span><span id="summaryProducts">Aucun</span></div>
+                <div class="summary-row"><span>Sous-total:</span><span id="summarySubtotal">0€</span></div>
+                <div class="summary-row hidden" id="summaryKmFeeRow"><span>Frais km (2€/km):</span><span id="summaryKmFee">0€</span></div>
+                <div class="summary-row total"><span>TOTAL:</span><span id="summaryTotal">0€</span></div>
+            </div>
+
+            <input type="text" class="form-input" placeholder="Nom complet *" id="clientName">
+            <input type="email" class="form-input" placeholder="Email *" id="clientEmail">
+            <input type="tel" class="form-input" placeholder="Téléphone *" id="clientPhone">
+            
+            <button class="confirm-btn" onclick="confirmReservation()">CONFIRMER LA RÉSERVATION</button>
+        </div>
+    </div>
 
     <script>
-const API_URL = 'https://orahnyx.site:8000';
-        let allProducts = [];
-        let allPacks = [];
+        let selectedDate = null;
+        let selectedTime = null;
+        let locationType = null;
+        let selectedPrestation = null;
+        let selectedProducts = [];
+        let currentMonth = new Date();
+        let products = [];
 
-        let booking = {
-            date: null,
-            time: null,
-            pack: null,
-            products: []
-        };
+        const mois = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
 
-        let currentMonth = new Date().getMonth();
-        let currentYear = new Date().getFullYear();
-
-        // Charger les données depuis l'API
-        async function loadData() {
-            try {
-                const productsRes = await fetch(`${API_URL}/api/products`);
-                const productsData = await productsRes.json();
-                allProducts = productsData.products || [];
-
-                const packsRes = await fetch(`${API_URL}/api/packs`);
-                const packsData = await packsRes.json();
-                allPacks = packsData.packs || [];
-
-                init();
-            } catch (error) {
-                console.error('Erreur chargement:', error);
-                alert('Erreur de connexion au serveur');
-            }
+async function loadPrestationsReservation() {
+    try {
+        const response = await fetch('/api/prestations');
+        const prestations = await response.json();
+        const grid = document.getElementById('prestationsGrid');
+        if (!prestations || prestations.length === 0) {
+            grid.innerHTML = '<div style="text-align: center; padding: 20px; color: #999;">Aucune prestation</div>';
+            return;
         }
+        grid.innerHTML = prestations.map(p => `
+            <div class="prestation-card" onclick="selectPrestation('${p.name.replace(/'/g, "\\'")}', ${p.price})">
+                <div class="prestation-name">${p.name}</div>
+                <div class="prestation-desc">${p.description || ''}</div>
+                <div class="prestation-price">${p.price}€</div>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('Erreur:', error);
+    }
+}
+loadPrestationsReservation();
 
-        function init() {
-            renderCalendar();
-            renderPacks();
-            renderProducts();
-            renderTimeSlots();
-        }
 
-        // CALENDAR
+
         function renderCalendar() {
-            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const year = currentMonth.getFullYear();
+            const month = currentMonth.getMonth();
+            document.getElementById('currentMonth').textContent = `${mois[month]} ${year}`;
+            
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+            
+            const calendarDays = document.getElementById('calendarDays');
+            calendarDays.innerHTML = '';
+            
+            for (let i = 0; i < startDay; i++) {
+                calendarDays.innerHTML += '<div></div>';
+            }
+            
             const today = new Date();
-
-            document.getElementById('monthYear').textContent = 
-                new Date(currentYear, currentMonth).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
-
-            const grid = document.getElementById('calendarGrid');
-            grid.innerHTML = '';
-
-            ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].forEach(day => {
-                const header = document.createElement('div');
-                header.className = 'day-header';
-                header.textContent = day;
-                grid.appendChild(header);
-            });
-
-            for (let i = 0; i < firstDay; i++) {
-                grid.appendChild(document.createElement('div'));
-            }
-
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayEl = document.createElement('div');
-                dayEl.className = 'day';
-                dayEl.textContent = day;
-
-                const date = new Date(currentYear, currentMonth, day);
+            today.setHours(0, 0, 0, 0);
+            
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const date = new Date(year, month, day);
+                const isPast = date < today;
+                const isSelected = selectedDate && selectedDate.getTime() === date.getTime();
                 
-                if (date < today) {
-                    dayEl.classList.add('disabled');
-                } else {
-                    dayEl.onclick = () => selectDate(day, dayEl);
-                    
-                    if (booking.date && booking.date.getDate() === day && 
-                        booking.date.getMonth() === currentMonth && 
-                        booking.date.getFullYear() === currentYear) {
-                        dayEl.classList.add('selected');
-                    }
+                calendarDays.innerHTML += `
+                    <div class="calendar-day ${isPast ? 'disabled' : ''} ${isSelected ? 'selected' : ''}" 
+                         onclick="${!isPast ? `selectDate(new Date(${year}, ${month}, ${day}))` : ''}">${day}</div>
+                `;
+            }
+        }
+
+        function changeMonth(direction) {
+            currentMonth.setMonth(currentMonth.getMonth() + direction);
+            renderCalendar();
+        }
+
+        function selectDate(date) {
+            selectedDate = date;
+            renderCalendar();
+            document.getElementById('summaryDate').textContent = date.toLocaleDateString('fr-FR');
+            updateTotal();
+        }
+
+        function selectTime(time) {
+            selectedTime = time;
+            document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
+            event.target.classList.add('selected');
+            document.getElementById('summaryTime').textContent = time;
+            updateTotal();
+        }
+
+        function selectLocationType(type) {
+            locationType = type;
+            document.querySelectorAll('.location-option').forEach(el => el.classList.remove('selected'));
+            event.target.closest('.location-option').classList.add('selected');
+            
+            const kmInput = document.getElementById('kmInput');
+            if (type === 'domicile') {
+                kmInput.classList.remove('hidden');
+                document.getElementById('summaryType').textContent = 'À domicile';
+            } else {
+                kmInput.classList.add('hidden');
+                document.getElementById('summaryType').textContent = 'Au salon';
+                document.getElementById('summaryKmRow').classList.add('hidden');
+                document.getElementById('summaryKmFeeRow').classList.add('hidden');
+            }
+            updateTotal();
+        }
+
+        function selectPrestation(name, price) {
+            selectedPrestation = { name, price };
+            document.querySelectorAll('.prestation-card').forEach(el => el.classList.remove('selected'));
+            event.target.closest('.prestation-card').classList.add('selected');
+            document.getElementById('summaryPrestation').textContent = `${name} (${price}€)`;
+            updateTotal();
+        }
+
+        function toggleProduct(id, name, price) {
+            const index = selectedProducts.findIndex(p => p.id === id);
+            if (index > -1) {
+                selectedProducts.splice(index, 1);
+            } else {
+                selectedProducts.push({ id, name, price });
+            }
+            
+            const productsList = selectedProducts.map(p => p.name).join(', ');
+            document.getElementById('summaryProducts').textContent = productsList || 'Aucun';
+            updateTotal();
+        }
+
+        function updateTotal() {
+            let subtotal = selectedPrestation ? selectedPrestation.price : 0;
+            subtotal += selectedProducts.reduce((sum, p) => sum + p.price, 0);
+            
+            let kmFee = 0;
+            if (locationType === 'domicile') {
+                const km = parseFloat(document.querySelector('#kmInput input').value) || 0;
+                kmFee = km * 2;
+                document.getElementById('summaryKm').textContent = `${km} km`;
+                document.getElementById('summaryKmFee').textContent = `${kmFee.toFixed(2)}€`;
+                document.getElementById('summaryKmRow').classList.remove('hidden');
+                document.getElementById('summaryKmFeeRow').classList.remove('hidden');
+            }
+            
+            const total = subtotal + kmFee;
+            document.getElementById('summarySubtotal').textContent = `${subtotal}€`;
+            document.getElementById('summaryTotal').textContent = `${total.toFixed(2)}€`;
+        }
+
+        async function loadProducts() {
+            try {
+                const response = await fetch('/api/produits');
+                products = await response.json();
+                
+                const productsList = document.getElementById('productsList');
+                if (products.length === 0) {
+                    productsList.innerHTML = '<div style="text-align: center; color: #999; padding: 20px;">Aucun produit disponible</div>';
+                    return;
                 }
-
-                grid.appendChild(dayEl);
-            }
-        }
-
-        function selectDate(day, element) {
-            document.querySelectorAll('.day.selected').forEach(d => d.classList.remove('selected'));
-            element.classList.add('selected');
-            
-            booking.date = new Date(currentYear, currentMonth, day);
-            loadAvailableSlots();
-            updateSummary();
-        }
-
-        async function loadAvailableSlots() {
-            if (!booking.date) return;
-            
-            try {
-                const dateStr = booking.date.toISOString().split('T')[0];
-                const res = await fetch(`${API_URL}/api/calendar/available/${dateStr}`);
-                const data = await res.json();
                 
-                renderTimeSlots(data.available || []);
+                productsList.innerHTML = products.map(p => `
+                    <div class="product-item" onclick="toggleProduct(${p.id}, '${p.name.replace(/'/g, "\\'")}', ${p.price}); this.classList.toggle('selected');">
+                        <div class="product-info">
+                            <div class="product-name">${p.name}</div>
+                            <div class="product-price">${p.price}€</div>
+                        </div>
+                        <input type="checkbox" class="product-checkbox" onclick="event.stopPropagation();">
+                    </div>
+                `).join('');
             } catch (error) {
-                console.error('Erreur chargement créneaux:', error);
+                console.error('Erreur chargement produits:', error);
+                document.getElementById('productsList').innerHTML = '<div style="text-align: center; color: #dc3545;">Erreur de chargement</div>';
             }
         }
 
-        function previousMonth() {
-            currentMonth--;
-            if (currentMonth < 0) {
-                currentMonth = 11;
-                currentYear--;
-            }
-            renderCalendar();
-        }
-
-        function nextMonth() {
-            currentMonth++;
-            if (currentMonth > 11) {
-                currentMonth = 0;
-                currentYear++;
-            }
-            renderCalendar();
-        }
-
-        // PACKS
-        function renderPacks() {
-            const container = document.getElementById('packOptions');
-            container.innerHTML = allPacks.map((pack, idx) => `
-                <label class="pack-option">
-                    <input type="radio" name="pack" value="${pack.id}" onchange="selectPack(${pack.id})">
-                    <div>
-                        <div class="pack-name">${pack.name}</div>
-                        <div class="pack-details">${pack.duration_minutes || pack.duration} minutes</div>
-                        <div class="pack-price">${pack.price}€</div>
-                    </div>
-                </label>
-            `).join('');
-        }
-
-        function selectPack(packId) {
-            booking.pack = allPacks.find(p => p.id === packId);
-            updateSummary();
-        }
-
-        // PRODUCTS
-        function renderProducts() {
-            const container = document.getElementById('productsGrid');
-            container.innerHTML = allProducts.map(product => `
-                <label class="product-item">
-                    <input type="checkbox" value="${product.id}" onchange="toggleProduct(${product.id}, '${product.name}', ${product.price}, this.checked)">
-                    <div class="product-info">
-                        <div class="product-name">${product.name}</div>
-                        <div class="product-price">${product.price}€</div>
-                    </div>
-                </label>
-            `).join('');
-        }
-
-        function toggleProduct(productId, productName, price, checked) {
-            if (checked) {
-                booking.products.push({ id: productId, name: productName, price });
-            } else {
-                booking.products = booking.products.filter(p => p.id !== productId);
-            }
-            updateSummary();
-        }
-
-        // TIME SLOTS
-        function renderTimeSlots(availableSlots = []) {
-            const container = document.getElementById('timeGrid');
-            const timeSlots = ['09:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
-            const slots = availableSlots.length > 0 ? availableSlots : timeSlots;
+        async function confirmReservation() {
+            const name = document.getElementById('clientName').value;
+            const email = document.getElementById('clientEmail').value;
+            const phone = document.getElementById('clientPhone').value;
             
-            container.innerHTML = slots.map(time => `
-                <div class="time-slot" onclick="selectTime('${time}', this)">${time}</div>
-            `).join('');
-        }
-
-        function selectTime(time, element) {
-            document.querySelectorAll('.time-slot.selected').forEach(t => t.classList.remove('selected'));
-            element.classList.add('selected');
-            booking.time = time;
-            updateSummary();
-        }
-
-        // SUMMARY
-        function updateSummary() {
-            const dateStr = booking.date ? booking.date.toLocaleDateString('fr-FR') : 'Non sélectionnée';
-            const packStr = booking.pack ? booking.pack.name : 'Aucune';
-            const timeStr = booking.time || 'Non sélectionnée';
-
-            document.getElementById('summaryDate').textContent = dateStr;
-            document.getElementById('summaryTime').textContent = timeStr;
-            document.getElementById('summaryPack').textContent = `${packStr} ${booking.pack ? '(' + booking.pack.price + '€)' : ''}`;
-
-            const productsTotal = booking.products.reduce((sum, p) => sum + p.price, 0);
-            const packTotal = booking.pack ? booking.pack.price : 0;
-            const total = packTotal + productsTotal;
-
-            if (booking.products.length > 0) {
-                document.getElementById('summaryProducts').innerHTML = 
-                    `<div class="summary-row"><span>Produits:</span><span>${productsTotal}€</span></div>`;
-            } else {
-                document.getElementById('summaryProducts').innerHTML = '';
-            }
-
-            document.getElementById('summaryTotal').textContent = total + '€';
-        }
-
-        // SUBMIT
-        function submitBooking() {
-            if (!booking.date || !booking.time || !booking.pack) {
-                alert('Veuillez sélectionner une date, une heure et une prestation');
+            if (!selectedDate || !selectedTime || !locationType || !selectedPrestation || !name || !email || !phone) {
+                alert('Veuillez remplir tous les champs obligatoires');
                 return;
             }
-
-            document.getElementById('clientModal').classList.add('active');
-        }
-
-        function closeModal() {
-            document.getElementById('clientModal').classList.remove('active');
-        }
-
-        async function confirmBooking() {
-            const clientName = document.getElementById('clientName').value;
-            const clientEmail = document.getElementById('clientEmail').value;
-            const clientPhone = document.getElementById('clientPhone').value;
-
-            if (!clientName || !clientEmail || !clientPhone) {
-                alert('Veuillez remplir tous les champs');
-                return;
-            }
-
-            const totalPrice = booking.pack.price + booking.products.reduce((sum, p) => sum + p.price, 0);
-
-            const reservationData = {
-                clientName,
-                clientEmail,
-                clientPhone,
-                date: booking.date.toISOString().split('T')[0],
-                time: booking.time,
-                packId: booking.pack.id,
-                products: booking.products,
-                totalPrice
-            };
-
+            
+            const btn = document.querySelector('.confirm-btn');
+            btn.disabled = true;
+            btn.textContent = 'ENVOI EN COURS...';
+            
             try {
-                const res = await fetch(`${API_URL}/api/reservations/create`, {
+                const km = locationType === 'domicile' ? (parseFloat(document.querySelector('#kmInput input').value) || 0) : 0;
+                const subtotal = selectedPrestation.price + selectedProducts.reduce((sum, p) => sum + p.price, 0);
+                const kmFee = km * 2;
+                const total = subtotal + kmFee;
+                
+                const response = await fetch('/api/reservations', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(reservationData)
+                    body: JSON.stringify({
+                        client_name: name,
+                        client_email: email,
+                        client_phone: phone,
+                        reservation_date: selectedDate.toISOString().split('T')[0],
+                        reservation_time: selectedTime,
+                        location_type: locationType,
+                        distance_km: km,
+                        prestation_name: selectedPrestation.name,
+                        prestation_price: selectedPrestation.price,
+                        products: selectedProducts,
+                        total_price: total
+                    })
                 });
-
-                const data = await res.json();
-
-                if (data.success) {
-                    alert(`✅ Réservation confirmée!\n\nDate: ${reservationData.date} à ${reservationData.time}\nPrestation: ${booking.pack.name}\nTotal: ${totalPrice}€\n\nUn email de confirmation a été envoyé à ${clientEmail}`);
-                    
-                    booking = { date: null, time: null, pack: null, products: [] };
-                    document.getElementById('clientModal').classList.remove('active');
-                    init();
-                    
-                    document.getElementById('clientName').value = '';
-                    document.getElementById('clientEmail').value = '';
-                    document.getElementById('clientPhone').value = '';
+                
+                if (response.ok) {
+                    btn.textContent = '✓ RÉSERVATION CONFIRMÉE';
+                    btn.style.background = '#28a745';
+                    setTimeout(() => {
+                        window.location.href = '../';
+                    }, 1500);
                 } else {
-                    alert('Erreur: ' + (data.error || 'Impossible de créer la réservation'));
+                    throw new Error('Erreur serveur');
                 }
             } catch (error) {
                 console.error('Erreur:', error);
-                alert('Erreur de connexion au serveur');
+                alert('Erreur lors de la réservation. Veuillez réessayer.');
+                btn.disabled = false;
+                btn.textContent = 'CONFIRMER LA RÉSERVATION';
             }
         }
 
-        // START
-        loadData();
+        renderCalendar();
+        loadProducts();
     </script>
-
 </body>
 </html>

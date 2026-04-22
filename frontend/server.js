@@ -31,15 +31,17 @@ const server = http.createServer((req, res) => {
     return;
   }
   
-  // Route pour admin login
-  if (urlPath === '/admin/login' || urlPath === '/admin/login/') {
-    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-    const adminLoginPath = path.join(__dirname, 'pages', 'admin', 'login.html');
+  // Route pour tous les fichiers HTML admin
+  if (urlPath.startsWith('/admin/') && urlPath.endsWith('.html')) {
+    const fileName = path.basename(urlPath);
+    const adminFilePath = path.join(__dirname, 'pages', 'admin', fileName);
     try {
-      res.end(fs.readFileSync(adminLoginPath));
+      const content = fs.readFileSync(adminFilePath);
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end(content);
     } catch (e) {
       res.writeHead(404);
-      res.end('admin/login.html not found');
+      res.end('Admin file not found');
     }
     return;
   }
@@ -57,9 +59,11 @@ const server = http.createServer((req, res) => {
     return;
   }
   
-  // Route pour admin (redirige vers login)
+  // Route pour admin (redirige vers dashboard)
+
+
   if (urlPath === '/admin' || urlPath === '/admin/') {
-    res.writeHead(301, { 'Location': '/admin/login' });
+    res.writeHead(301, { 'Location': '/admin/login.html' });
     res.end();
     return;
   }

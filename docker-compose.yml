@@ -1,4 +1,6 @@
-  services:
+version: '3.8'
+
+services:
   db:
     image: postgres:15-alpine
     container_name: salon-premium-db
@@ -23,6 +25,10 @@
     ports:
       - "8000:8000"
     environment:
+      POSTGRES_HOST: db
+      POSTGRES_USER: salon_user
+      POSTGRES_PASSWORD: salon_password
+      POSTGRES_DB: salon_premium
       DATABASE_URL: postgresql://salon_user:salon_password@db:5432/salon_premium
       JWT_SECRET: votre_secret_super_securise_changez_moi_123456789
       REDIS_URL: redis://cache:6379
@@ -30,7 +36,9 @@
       - db
       - cache
     volumes:
+      - ./backend:/app
       - ./uploads:/app/uploads
+      - /app/node_modules
     restart: unless-stopped
 
   frontend:
@@ -63,4 +71,3 @@ volumes:
 networks:
   default:
     name: salon-network
-
