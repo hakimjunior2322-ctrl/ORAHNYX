@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html><head><title>Test</title></head><body>
+<h1>TEST - Si vous voyez ceci, le serveur fonctionne</h1>
+<button onclick="testAPI()">Tester API Produits</button>
+<div id="result"></div>
+<script>
+async function testAPI() {
+    const token = localStorage.getItem('token');
+    document.getElementById('result').innerHTML = 'Chargement...';
+    
+    const response = await fetch('/api/produits', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    });
+    
+    const data = await response.json();
+    document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+}
+</script>
+</body></html>

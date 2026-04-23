@@ -210,7 +210,7 @@ const errorAlert = document.getElementById('errorAlert');
 const loading = document.getElementById('loading');
 const loginBtn = document.getElementById('loginBtn');
 
-if (localStorage.getItem('admin_token')) {
+if (localStorage.getItem('token')) {
   window.location.href = '/admin/dashboard.html';
 }
 
@@ -236,7 +236,7 @@ loginForm.addEventListener('submit', async (e) => {
     const data = await response.json();
 
     if (response.ok) {
-      localStorage.setItem('admin_token', data.token);
+localStorage.setItem('token', data.token);
       localStorage.setItem('admin_email', email);
       window.location.href = '/admin/dashboard.html';
     } else {
