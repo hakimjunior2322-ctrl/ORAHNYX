@@ -780,22 +780,7 @@
   <div class="admin-container">
     <!-- SIDEBAR -->
     <div class="sidebar">
-      <div class="sidebar-logo">✨ SALON</div>
-      
-      <!-- Navigation Pages -->
-      <div style="margin-bottom: 40px;">
-        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); margin-bottom: 15px; padding: 0 16px; font-weight: 700;">📱 Pages Publiques</div>
-        <ul class="sidebar-menu" style="margin: 0;">
-          <li><a href="/" target="_blank" style="color: var(--text-secondary);"><i class="fas fa-home"></i> Accueil</a></li>
-          <li><a href="/galerie" target="_blank" style="color: var(--text-secondary);"><i class="fas fa-images"></i> Galerie</a></li>
-          <li><a href="/prestations" target="_blank" style="color: var(--text-secondary);"><i class="fas fa-spa"></i> Prestations</a></li>
-          <li><a href="/produits" target="_blank" style="color: var(--text-secondary);"><i class="fas fa-shopping-bag"></i> Produits</a></li>
-          <li><a href="/reservation" target="_blank" style="color: var(--text-secondary);"><i class="fas fa-calendar-alt"></i> Réserver</a></li>
-          <li><a href="/contact" target="_blank" style="color: var(--text-secondary);"><i class="fas fa-envelope"></i> Contact</a></li>
-        </ul>
-      </div>
 
-      <div style="border-top: 1px solid var(--border-color); padding-top: 30px; margin-bottom: 30px;">
         <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); margin-bottom: 15px; padding: 0 16px; font-weight: 700;">⚙️ Administration</div>
         <ul class="sidebar-menu" style="margin: 0;">
           <li><a href="#" onclick="showPanel('produits')" class="menu-link active"><i class="fas fa-shopping-bag"></i> Gestion Produits</a></li>
@@ -1508,11 +1493,53 @@
 
     // ==================== GALERIE ====================
     async function loadGalerie() {
+      const galeries = await apiCall('/galeries');
+      if (!galeries) return;
+
       const grid = document.getElementById('galerieGrid');
-      grid.innerHTML = '<div class="loading">Chargement...</div>';
+      if (galeries.length === 0) {
+        grid.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 40px; grid-column: 1/-1;">Aucune photo pour le moment</p>';
+        return;
+      }
+
+      grid.innerHTML = galeries.map(g => `
+        <div class="gallery-item">
+          ${g.image_url ? `<img src="${g.image_url}" alt="Galerie">` : '📸'}
+          <button class="gallery-item-delete" onclick="deleteGalerie(${g.id})"><i class="fas fa-trash"></i></button>
+        </div>
+      `).join('');
     }
 
+    async function deleteGalerie(id) {
+      if (!confirm('Supprimer cette photo ?')) return;
+      await apiCall(`/galeries/${id}`, 'DELETE');
+      showAlert('Photo supprimée');
+      loadGalerie();
+    }
+
+    document.getElementById('galerieForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const fileInput = document.getElementById('galerieImageFile');
+      if (!fileInput.files[0]) {
+        showAlert('Veuillez sélectionner une photo', 'error');
+        return;
+      }
+
+      const url = await uploadImage(fileInput);
+      if (url) {
+        await apiCall('/galeries', 'POST', { image_url: url });
+        showAlert('Photo ajoutée à la galerie');
+        closeModal('galerieModal');
+        loadGalerie();
+        fileInput.value = '';
+        document.getElementById('galerieImagePreview').style.display = 'none';
+      }
+    });
+
     function openGalerieModal() {
+      document.getElementById('galerieImageFile').value = '';
+      document.getElementById('galerieImagePreview').style.display = 'none';
       openModal('galerieModal');
     }
 
